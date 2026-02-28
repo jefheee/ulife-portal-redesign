@@ -1,5 +1,5 @@
 {
-  "name": "Portal Ulife Dashboard",
-  "description": "Um dashboard moderno e responsivo para o portal universitário, com acesso rápido a aulas, disciplinas e serviços.",
+  "name": "Redesign Portal Ulife",
+  "description": "Redesign moderno do portal universitário Ulife focado em UX/UI, construído com React e Tailwind CSS.",
   "requestFramePermissions": []
 }
