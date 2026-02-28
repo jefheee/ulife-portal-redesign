@@ -1,7 +1,20 @@
 import React, { useState } from 'react';
-import { GraduationCap, HelpCircle, Users } from 'lucide-react';
+import { GraduationCap, HelpCircle, Users, User, Plus } from 'lucide-react';
 
-const LoginScreen = ({ onLogin }: { onLogin: () => void }) => {
+const LoginScreen = ({ onLogin }: { onLogin: (username: string) => void }) => {
+  const [username, setUsername] = useState('');
+  const [error, setError] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (username.trim().length < 5) {
+      setError(true);
+    } else {
+      setError(false);
+      onLogin(username.trim());
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 font-sans">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
@@ -18,20 +31,36 @@ const LoginScreen = ({ onLogin }: { onLogin: () => void }) => {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow-sm sm:rounded-xl sm:px-10 border border-gray-100">
-          <form className="space-y-6" onSubmit={(e) => { e.preventDefault(); onLogin(); }}>
+          <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
-              <label htmlFor="username" className="block text-sm font-semibold text-gray-700">
+              <label htmlFor="username" className="block text-sm font-semibold text-gray-700 mb-2">
                 RA, CPF ou Nome de Usuário
               </label>
-              <div className="mt-2">
+              {error && (
+                <p className="text-red-500 text-sm font-medium mb-1.5">
+                  Login não preenchido ou com formato inválido
+                </p>
+              )}
+              <div className="flex rounded-lg shadow-sm">
                 <input
                   id="username"
                   name="username"
                   type="text"
-                  required
-                  className="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 sm:text-sm transition-all"
-                  placeholder="Digite seu acesso"
+                  value={username}
+                  onChange={(e) => {
+                    setUsername(e.target.value);
+                    if (error) setError(false);
+                  }}
+                  className={`flex-1 min-w-0 block w-full px-4 py-3 rounded-none rounded-l-lg border ${
+                    error 
+                      ? 'border-red-300 focus:ring-red-500 focus:border-red-500' 
+                      : 'border-gray-300 focus:ring-purple-500 focus:border-purple-500'
+                  } sm:text-sm transition-all focus:outline-none focus:ring-2`}
+                  placeholder="Insira seu login"
                 />
+                <span className="inline-flex items-center px-4 rounded-r-lg border border-l-0 border-gray-300 bg-gray-50 text-gray-500 sm:text-sm font-medium">
+                  @ulife.com.br
+                </span>
               </div>
             </div>
 
@@ -78,6 +107,61 @@ const LoginScreen = ({ onLogin }: { onLogin: () => void }) => {
   );
 };
 
+const MicrosoftSelectionScreen = ({ username, onSelectAccount, onBack }: { username: string, onSelectAccount: () => void, onBack: () => void }) => {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 to-gray-900 flex items-center justify-center p-4 font-sans">
+      <div className="bg-white rounded-lg shadow-2xl w-full max-w-[440px] overflow-hidden">
+        <div className="p-8 sm:p-10">
+          <div className="flex items-center gap-2 mb-8">
+            <div className="w-6 h-6 bg-purple-600 rounded flex items-center justify-center text-white font-bold text-xs">
+              Â
+            </div>
+            <span className="text-gray-600 font-semibold text-sm tracking-tight">Ecossistema Ânima</span>
+          </div>
+          
+          <h2 className="text-2xl font-semibold text-gray-900 mb-6 tracking-tight">Escolha uma conta</h2>
+          
+          <div className="space-y-1">
+            <button 
+              onClick={onSelectAccount}
+              className="w-full flex items-center gap-4 p-3 -mx-3 hover:bg-gray-50 transition-colors rounded-lg text-left group"
+            >
+              <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 shrink-0 group-hover:bg-purple-100 group-hover:text-purple-600 transition-colors">
+                <User size={24} />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-base font-bold text-gray-900 truncate">Jefherson Luiz da Silva</p>
+                <p className="text-sm text-gray-500 truncate">{username}@ulife.com.br</p>
+                <p className="text-xs text-gray-400 mt-0.5">Entrou</p>
+              </div>
+            </button>
+            
+            <div className="border-t border-gray-200 my-3"></div>
+            
+            <button className="w-full flex items-center gap-4 p-3 -mx-3 hover:bg-gray-50 transition-colors rounded-lg text-left">
+              <div className="w-12 h-12 flex items-center justify-center text-gray-500 shrink-0">
+                <Plus size={24} />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-base font-medium text-gray-900 truncate">Use outra conta</p>
+              </div>
+            </button>
+          </div>
+        </div>
+        
+        <div className="bg-gray-50 px-8 py-4 flex justify-end border-t border-gray-100">
+          <button 
+            onClick={onBack}
+            className="px-6 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium rounded-md transition-colors text-sm"
+          >
+            Voltar
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const DashboardScreen = () => {
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 font-sans">
@@ -90,13 +174,27 @@ const DashboardScreen = () => {
 };
 
 export default function App() {
-  const [currentScreen, setCurrentScreen] = useState<'login' | 'dashboard'>('login');
+  const [currentScreen, setCurrentScreen] = useState<'login' | 'microsoft-selection' | 'dashboard'>('login');
+  const [username, setUsername] = useState('');
+
+  const handleLogin = (user: string) => {
+    setUsername(user);
+    setCurrentScreen('microsoft-selection');
+  };
 
   return (
     <>
-      {currentScreen === 'login' ? (
-        <LoginScreen onLogin={() => setCurrentScreen('dashboard')} />
-      ) : (
+      {currentScreen === 'login' && (
+        <LoginScreen onLogin={handleLogin} />
+      )}
+      {currentScreen === 'microsoft-selection' && (
+        <MicrosoftSelectionScreen 
+          username={username} 
+          onSelectAccount={() => setCurrentScreen('dashboard')} 
+          onBack={() => setCurrentScreen('login')} 
+        />
+      )}
+      {currentScreen === 'dashboard' && (
         <DashboardScreen />
       )}
     </>
