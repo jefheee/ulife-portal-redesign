@@ -175,6 +175,21 @@ const LoginScreen = ({ onLogin, onRecoverPassword }: { onLogin: (username: strin
 };
 
 const RecuperarSenhaScreen = ({ onBack }: { onBack: () => void }) => {
+  const [inputValue, setInputValue] = useState('');
+  const [error, setError] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const isValid = /^\d{5,}$/.test(inputValue.trim());
+    if (!isValid) {
+      setError(true);
+    } else {
+      setError(false);
+      setIsSuccessModalOpen(true);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col font-sans">
       <header className="bg-[#00143C] h-16 flex items-center px-6 shadow-md shrink-0">
@@ -193,16 +208,29 @@ const RecuperarSenhaScreen = ({ onBack }: { onBack: () => void }) => {
             Ao utilizar esta função, caso não receba o e-mail de recuperação de senha em um de seus e-mails pessoais, por favor entre em contato com os canais oficiais de atendimento.
           </p>
           
-          <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+          <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <label htmlFor="recovery-input" className="block text-sm font-semibold text-gray-700 mb-2">
                 Informe seu RA (número de matrícula), login ou cpf: *
               </label>
+              {error && (
+                <p className="text-red-500 text-sm font-medium mb-1.5">
+                  Formato inválido. Digite apenas números (mín. 5 dígitos).
+                </p>
+              )}
               <input
                 id="recovery-input"
                 type="text"
-                required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all"
+                value={inputValue}
+                onChange={(e) => {
+                  setInputValue(e.target.value);
+                  if (error) setError(false);
+                }}
+                className={`w-full px-4 py-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 transition-all ${
+                  error 
+                    ? 'border-red-300 focus:ring-red-500 focus:border-red-500' 
+                    : 'border-gray-300 focus:ring-purple-500 focus:border-purple-500'
+                }`}
               />
             </div>
 
@@ -224,6 +252,35 @@ const RecuperarSenhaScreen = ({ onBack }: { onBack: () => void }) => {
           </form>
         </div>
       </main>
+
+      {isSuccessModalOpen && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-xl max-w-md w-full overflow-hidden flex flex-col">
+            <div className="bg-emerald-50 p-6 border-b border-emerald-100">
+              <h3 className="text-xl font-bold text-emerald-800 flex items-center gap-2">
+                <CheckSquare size={24} className="text-emerald-600" />
+                Sucesso
+              </h3>
+            </div>
+            <div className="p-6 text-sm text-gray-600 space-y-4">
+              <p>
+                Foi enviado um e-mail de recuperação de senha para seu(s) email(s): <strong>{inputValue.substring(0, 3)}*@ulife.com.br</strong>.
+              </p>
+              <p>
+                Caso não tenha recebido o email de recuperação de senha, acione a central de atendimento da sua Instituição através do Whatsapp (link disponível no site da instituição) ou presencialmente.
+              </p>
+            </div>
+            <div className="p-6 bg-gray-50 border-t border-gray-100 flex justify-end">
+              <button 
+                onClick={onBack} 
+                className="bg-[#00143C] hover:bg-[#002060] text-white font-bold py-2.5 px-6 rounded-lg transition-colors shadow-sm"
+              >
+                Fechar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -326,7 +383,7 @@ const Sidebar = ({ currentView, setCurrentView }: { currentView: string, setCurr
   );
 };
 
-const TopNavbar = ({ isDarkMode, toggleDarkMode, onLogout }: { isDarkMode: boolean, toggleDarkMode: () => void, onLogout: () => void }) => {
+const TopNavbar = ({ isDarkMode, toggleDarkMode, onLogout, onNavigate }: { isDarkMode: boolean, toggleDarkMode: () => void, onLogout: () => void, onNavigate: (view: string) => void }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
@@ -340,9 +397,9 @@ const TopNavbar = ({ isDarkMode, toggleDarkMode, onLogout }: { isDarkMode: boole
 
   return (
     <>
-      <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 h-16 flex items-center justify-between px-4 sm:px-6 sticky top-0 z-20 shrink-0 transition-colors">
+      <header className="bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-slate-800 h-16 flex items-center justify-between px-4 sm:px-6 sticky top-0 z-20 shrink-0 transition-colors">
         <div className="flex items-center gap-4 flex-1">
-          <button className="md:hidden p-2 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg">
+          <button className="md:hidden p-2 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg">
             <Menu size={24} />
           </button>
           
@@ -359,17 +416,17 @@ const TopNavbar = ({ isDarkMode, toggleDarkMode, onLogout }: { isDarkMode: boole
                 onFocus={() => setIsSearchOpen(searchQuery.length > 0)}
                 onBlur={() => setTimeout(() => setIsSearchOpen(false), 200)}
                 placeholder="Pesquisar aulas, serviços, documentos..."
-                className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full text-sm focus:bg-white dark:focus:bg-gray-900 focus:border-purple-500 dark:focus:border-purple-500 focus:ring-4 focus:ring-purple-50 dark:focus:ring-purple-900/20 outline-none transition-all dark:text-white dark:placeholder-gray-400"
+                className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-full text-sm focus:bg-white dark:focus:bg-slate-900 focus:border-purple-500 dark:focus:border-purple-500 focus:ring-4 focus:ring-purple-50 dark:focus:ring-purple-900/20 outline-none transition-all dark:text-white dark:placeholder-gray-400"
               />
             </div>
             
             {isSearchOpen && (
-              <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 overflow-hidden z-50">
+              <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-gray-100 dark:border-slate-700 overflow-hidden z-50">
                 {searchResults.length > 0 ? (
                   <ul className="py-2">
                     {searchResults.map((result, idx) => (
                       <li key={idx}>
-                        <button className="w-full px-4 py-2.5 flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-gray-700 text-left transition-colors">
+                        <button className="w-full px-4 py-2.5 flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-slate-700 text-left transition-colors">
                           <result.icon size={18} className="text-gray-400 dark:text-gray-500" />
                           <span className="text-sm font-medium text-gray-700 dark:text-gray-200">{result.label}</span>
                         </button>
@@ -389,24 +446,24 @@ const TopNavbar = ({ isDarkMode, toggleDarkMode, onLogout }: { isDarkMode: boole
         <div className="flex items-center gap-2 sm:gap-4 ml-4">
           <button 
             onClick={toggleDarkMode}
-            className="p-2 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
+            className="p-2 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-full transition-colors"
           >
             {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
           </button>
 
           <button 
             onClick={() => setIsNotificationsOpen(true)}
-            className="relative p-2 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
+            className="relative p-2 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-full transition-colors"
           >
             <Bell size={20} />
-            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full ring-2 ring-white dark:ring-gray-900"></span>
+            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full ring-2 ring-white dark:ring-slate-900"></span>
           </button>
           
           <div className="relative">
             <button 
               onClick={() => setIsProfileOpen(!isProfileOpen)}
               onBlur={() => setTimeout(() => setIsProfileOpen(false), 200)}
-              className="flex items-center gap-3 pl-2 sm:pl-4 border-l border-gray-200 dark:border-gray-800 cursor-pointer hover:opacity-80 transition-opacity"
+              className="flex items-center gap-3 pl-2 sm:pl-4 border-l border-gray-200 dark:border-slate-800 cursor-pointer hover:opacity-80 transition-opacity"
             >
               <div className="text-right hidden sm:block">
                 <p className="text-sm font-semibold text-gray-900 dark:text-white leading-tight">Jefherson</p>
@@ -421,18 +478,18 @@ const TopNavbar = ({ isDarkMode, toggleDarkMode, onLogout }: { isDarkMode: boole
             </button>
 
             {isProfileOpen && (
-              <div className="absolute top-full right-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 overflow-hidden z-50">
-                <div className="p-4 border-b border-gray-100 dark:border-gray-700 sm:hidden">
+              <div className="absolute top-full right-0 mt-2 w-56 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-gray-100 dark:border-slate-700 overflow-hidden z-50">
+                <div className="p-4 border-b border-gray-100 dark:border-slate-700 sm:hidden">
                   <p className="text-sm font-bold text-gray-900 dark:text-white">Jefherson Luiz</p>
                   <p className="text-xs text-gray-500 dark:text-gray-400">ADS • 3º Semestre</p>
                 </div>
                 <ul className="py-2">
-                  <li><button className="w-full px-4 py-2 text-sm text-left text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">Meus Dados</button></li>
-                  <li><button className="w-full px-4 py-2 text-sm text-left text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">Meus Documentos</button></li>
-                  <li><button className="w-full px-4 py-2 text-sm text-left text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">Meus Pagamentos</button></li>
-                  <li><button className="w-full px-4 py-2 text-sm text-left text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">Configurar Notificações</button></li>
-                  <li><button className="w-full px-4 py-2 text-sm text-left text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">Ajuda</button></li>
-                  <li className="border-t border-gray-100 dark:border-gray-700 mt-2 pt-2">
+                  <li><button onClick={() => onNavigate('meus-dados')} className="w-full px-4 py-2 text-sm text-left text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors">Meus Dados</button></li>
+                  <li><button className="w-full px-4 py-2 text-sm text-left text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors">Meus Documentos</button></li>
+                  <li><button className="w-full px-4 py-2 text-sm text-left text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors">Meus Pagamentos</button></li>
+                  <li><button className="w-full px-4 py-2 text-sm text-left text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors">Configurar Notificações</button></li>
+                  <li><button className="w-full px-4 py-2 text-sm text-left text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors">Ajuda</button></li>
+                  <li className="border-t border-gray-100 dark:border-slate-700 mt-2 pt-2">
                     <button 
                       onClick={onLogout}
                       className="w-full px-4 py-2 text-sm text-left text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 font-medium transition-colors"
@@ -451,10 +508,10 @@ const TopNavbar = ({ isDarkMode, toggleDarkMode, onLogout }: { isDarkMode: boole
       {isNotificationsOpen && (
         <div className="fixed inset-0 z-50 overflow-hidden">
           <div className="absolute inset-0 bg-black/30 backdrop-blur-sm transition-opacity" onClick={() => setIsNotificationsOpen(false)} />
-          <div className="fixed inset-y-0 right-0 max-w-sm w-full bg-white dark:bg-gray-900 shadow-2xl flex flex-col transform transition-transform duration-300">
-            <div className="flex items-center justify-between p-4 border-b border-gray-100 dark:border-gray-800">
+          <div className="fixed inset-y-0 right-0 max-w-sm w-full bg-white dark:bg-slate-900 shadow-2xl flex flex-col transform transition-transform duration-300">
+            <div className="flex items-center justify-between p-4 border-b border-gray-100 dark:border-slate-800">
               <h2 className="text-lg font-bold text-gray-900 dark:text-white">Notificações</h2>
-              <button onClick={() => setIsNotificationsOpen(false)} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800">
+              <button onClick={() => setIsNotificationsOpen(false)} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-800">
                 <X size={20} />
               </button>
             </div>
@@ -471,7 +528,7 @@ const TopNavbar = ({ isDarkMode, toggleDarkMode, onLogout }: { isDarkMode: boole
                   </div>
                 </div>
               </div>
-              <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700">
+              <div className="bg-gray-50 dark:bg-slate-800 rounded-xl p-4 border border-gray-100 dark:border-slate-700">
                 <div className="flex items-start gap-3">
                   <div className="bg-emerald-100 dark:bg-emerald-900/30 p-2 rounded-lg text-emerald-600 dark:text-emerald-400 shrink-0">
                     <GraduationCap size={18} />
@@ -492,34 +549,42 @@ const TopNavbar = ({ isDarkMode, toggleDarkMode, onLogout }: { isDarkMode: boole
 };
 
 const HeroCard = () => {
-  const dayOfWeek = new Date().getDay(); // 0 = Domingo, 5 = Sexta, 6 = Sábado
+  const dayOfWeek = new Date().getDay(); // 0 = Domingo, 1 = Segunda, ..., 6 = Sábado
 
-  if (dayOfWeek === 0 || dayOfWeek === 6) {
+  const schedule: Record<number, { subject: string, prof: string, time: string, room: string } | null> = {
+    0: null,
+    1: null,
+    2: { subject: "Matemática Computacional Aplicada", prof: "Tamires Cristina", time: "19h00 às 21h50", room: "Sala H - 1º Andar - Pbh219" },
+    3: { subject: "Matemática Computacional Aplicada", prof: "Claudio Coelho", time: "19h00 às 21h50", room: "Sala D - Térreo - Pb119d" },
+    4: { subject: "Interação Humano Computador e UX", prof: "Fernando Costa", time: "19h00 às 21h50", room: "Laboratório De Inovação Digital I - E2" },
+    5: { subject: "Interação Humano Computador e UX", prof: "Armando Cardoso", time: "19h00 às 21h50", room: "Laboratório De Inovação Digital I - E2" },
+    6: null
+  };
+
+  const todayClass = schedule[dayOfWeek];
+
+  if (!todayClass) {
     return (
-      <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative overflow-hidden group transition-colors">
+      <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 dark:border-slate-700 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative overflow-hidden group transition-colors">
         <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-emerald-50 to-emerald-100/50 dark:from-emerald-900/20 dark:to-emerald-800/10 rounded-full -translate-y-1/2 translate-x-1/3 opacity-60 pointer-events-none group-hover:scale-110 transition-transform duration-700"></div>
         
         <div className="relative z-10 max-w-2xl">
           <div className="flex flex-wrap items-center gap-2 mb-3">
-            <span className="text-sm text-gray-500 dark:text-gray-400 font-medium flex items-center gap-1.5 bg-gray-50 dark:bg-gray-900 px-2.5 py-1 rounded-full border border-gray-100 dark:border-gray-700">
-              <Home size={14} className="text-gray-400 dark:text-gray-500" /> Fim de semana
+            <span className="text-sm text-gray-500 dark:text-gray-400 font-medium flex items-center gap-1.5 bg-gray-50 dark:bg-slate-900 px-2.5 py-1 rounded-full border border-gray-100 dark:border-slate-700">
+              <Home size={14} className="text-gray-400 dark:text-gray-500" /> Descanso
             </span>
           </div>
           <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2 tracking-tight">Bom descanso!</h2>
           <p className="text-gray-500 dark:text-gray-400 font-medium">
-            Você não tem aulas presenciais hoje. Aproveite o fim de semana para descansar ou colocar atividades em dia!
+            Você não tem aulas presenciais hoje. Aproveite para descansar ou colocar atividades em dia!
           </p>
         </div>
       </div>
     );
   }
 
-  const isFriday = dayOfWeek === 5;
-  const subjectName = isFriday ? "Interação Humano Computador e UX" : "Matemática Computacional Aplicada";
-  const professorName = isFriday ? "Armando Cardoso" : "Tamires Cristina";
-
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative overflow-hidden group transition-colors">
+    <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 dark:border-slate-700 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative overflow-hidden group transition-colors">
       <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-purple-50 to-purple-100/50 dark:from-purple-900/20 dark:to-purple-800/10 rounded-full -translate-y-1/2 translate-x-1/3 opacity-60 pointer-events-none group-hover:scale-110 transition-transform duration-700"></div>
       
       <div className="relative z-10 max-w-2xl">
@@ -528,13 +593,13 @@ const HeroCard = () => {
             <span className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse"></span>
             Ao Vivo Agora
           </span>
-          <span className="text-sm text-gray-500 dark:text-gray-400 font-medium flex items-center gap-1.5 bg-gray-50 dark:bg-gray-900 px-2.5 py-1 rounded-full border border-gray-100 dark:border-gray-700">
-            <Clock size={14} className="text-gray-400 dark:text-gray-500" /> Hoje, 19:00 às 21:50
+          <span className="text-sm text-gray-500 dark:text-gray-400 font-medium flex items-center gap-1.5 bg-gray-50 dark:bg-slate-900 px-2.5 py-1 rounded-full border border-gray-100 dark:border-slate-700">
+            <Clock size={14} className="text-gray-400 dark:text-gray-500" /> Hoje, {todayClass.time}
           </span>
         </div>
-        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2 tracking-tight">{subjectName}</h2>
-        <p className="text-gray-500 dark:text-gray-400 font-medium flex items-center gap-2">
-          Prof. {professorName} <span className="w-1 h-1 bg-gray-300 dark:bg-gray-600 rounded-full"></span> Modalidade Presencial
+        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2 tracking-tight">{todayClass.subject}</h2>
+        <p className="text-gray-500 dark:text-gray-400 font-medium flex items-center gap-2 flex-wrap">
+          Prof. {todayClass.prof} <span className="w-1 h-1 bg-gray-300 dark:bg-gray-600 rounded-full hidden sm:block"></span> <span className="block sm:inline">{todayClass.room}</span>
         </p>
       </div>
       
@@ -876,6 +941,93 @@ const RecordedClassesView = () => {
   );
 };
 
+const MeusDadosScreen = () => {
+  const [tutorialStep, setTutorialStep] = useState(0);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setTutorialStep(1);
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  return (
+    <div className="max-w-4xl mx-auto space-y-8">
+      <div>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white tracking-tight mb-1">Minhas Configurações</h2>
+        <p className="text-gray-500 dark:text-gray-400 font-medium">Gerencie seus dados pessoais, documentos e preferências.</p>
+      </div>
+
+      <div className="border-b border-gray-200 dark:border-slate-700">
+        <nav className="-mb-px flex gap-6" aria-label="Tabs">
+          <button className="border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors">
+            Notificações
+          </button>
+          <button className="border-purple-500 text-purple-600 dark:text-purple-400 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors">
+            Meus Dados
+          </button>
+          <button className="border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors">
+            Documentos de Matrícula
+          </button>
+        </nav>
+      </div>
+
+      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-700 p-6 sm:p-8 relative">
+        <div className="flex flex-col sm:flex-row gap-8 items-start">
+          <div className="shrink-0">
+            <img
+              src="https://picsum.photos/seed/jefherson/200/200"
+              alt="Perfil"
+              className="w-32 h-32 rounded-full object-cover ring-4 ring-purple-50 dark:ring-purple-900/20"
+              referrerPolicy="no-referrer"
+            />
+          </div>
+          
+          <div className="flex-1 w-full relative">
+            {tutorialStep === 1 && (
+              <div className="absolute -top-16 left-0 sm:-left-4 z-10 animate-bounce">
+                <div className="bg-purple-600 text-white text-sm font-medium py-3 px-4 rounded-xl shadow-lg relative">
+                  <p className="mb-2">Confira atentamente seus dados.</p>
+                  <div className="flex gap-2 justify-end">
+                    <button onClick={() => setTutorialStep(0)} className="text-xs text-purple-200 hover:text-white transition-colors">Não mostrar novamente</button>
+                    <button onClick={() => setTutorialStep(0)} className="text-xs bg-white text-purple-600 px-2 py-1 rounded font-bold hover:bg-purple-50 transition-colors">Próximo</button>
+                  </div>
+                  <div className="absolute -bottom-2 left-8 w-4 h-4 bg-purple-600 transform rotate-45"></div>
+                </div>
+              </div>
+            )}
+
+            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-6">Informações Pessoais</h3>
+            
+            <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-6">
+              <div>
+                <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Nome Completo</dt>
+                <dd className="mt-1 text-sm font-semibold text-gray-900 dark:text-white">Jefherson Luiz da Silva</dd>
+              </div>
+              <div>
+                <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">E-mail</dt>
+                <dd className="mt-1 text-sm font-semibold text-gray-900 dark:text-white">jefhersonluiz08@gmail.com</dd>
+              </div>
+              <div>
+                <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Login (RA/CPF)</dt>
+                <dd className="mt-1 text-sm font-semibold text-gray-900 dark:text-white">10551233931</dd>
+              </div>
+              <div>
+                <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Data de Nascimento</dt>
+                <dd className="mt-1 text-sm font-semibold text-gray-900 dark:text-white">15 / 08 / 2006</dd>
+              </div>
+              <div>
+                <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Telefone</dt>
+                <dd className="mt-1 text-sm font-semibold text-gray-900 dark:text-white">(48) 98808-5805</dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const DashboardScreen = ({ onLogout }: { onLogout: () => void }) => {
   const [currentView, setCurrentView] = useState('home');
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -898,6 +1050,8 @@ const DashboardScreen = ({ onLogout }: { onLogout: () => void }) => {
         return <ScheduleView />;
       case 'recorded':
         return <RecordedClassesView />;
+      case 'meus-dados':
+        return <MeusDadosScreen />;
       default:
         return (
           <div className="flex flex-col items-center justify-center h-64 text-gray-500 dark:text-gray-400">
@@ -909,11 +1063,11 @@ const DashboardScreen = ({ onLogout }: { onLogout: () => void }) => {
   };
 
   return (
-    <div className="flex h-screen w-full bg-gray-50 dark:bg-gray-950 font-sans text-gray-900 dark:text-gray-100 overflow-hidden selection:bg-purple-200 selection:text-purple-900 dark:selection:bg-purple-900 dark:selection:text-purple-100 transition-colors">
+    <div className="flex h-screen w-full bg-gray-50 dark:bg-slate-900 font-sans text-gray-900 dark:text-gray-100 overflow-hidden selection:bg-purple-200 selection:text-purple-900 dark:selection:bg-purple-900 dark:selection:text-purple-100 transition-colors">
       <Sidebar currentView={currentView} setCurrentView={setCurrentView} />
       
       <div className="flex-1 flex flex-col h-full overflow-hidden relative">
-        <TopNavbar isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} onLogout={onLogout} />
+        <TopNavbar isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} onLogout={onLogout} onNavigate={setCurrentView} />
         
         <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 pb-20">
           {renderView()}
