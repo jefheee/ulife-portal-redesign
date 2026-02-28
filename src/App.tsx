@@ -50,13 +50,10 @@ const LoginScreen = ({ onLogin, onRecoverPassword }: { onLogin: (username: strin
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col font-sans">
-      <div className="absolute top-6 left-6 sm:top-8 sm:left-8">
-        <svg width="120" height="40" viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M40 20 V 40 C 40 50 45 55 55 55 C 65 55 70 50 70 40 V 20" stroke="#7E22CE" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M45 10 L 55 18 L 65 10" stroke="#7E22CE" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round"/>
-          <text x="85" y="42" fontFamily="sans-serif" fontSize="32" fontWeight="bold" fill="#7E22CE">ecossistema</text>
-          <text x="85" y="65" fontFamily="sans-serif" fontSize="24" fontWeight="bold" fill="#7E22CE">ânima</text>
-        </svg>
+      <div className="absolute top-8 left-0 right-0 flex justify-center">
+        <h1 className="text-2xl font-light text-gray-700 tracking-wide">
+          Ecossistema <span className="font-semibold text-purple-700">Ânima</span>
+        </h1>
       </div>
 
       <div className="flex-1 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -207,13 +204,10 @@ const RecuperarSenhaScreen = ({ onBack }: { onBack: () => void }) => {
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col font-sans">
-      <div className="absolute top-6 left-6 sm:top-8 sm:left-8">
-        <svg width="120" height="40" viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M40 20 V 40 C 40 50 45 55 55 55 C 65 55 70 50 70 40 V 20" stroke="#7E22CE" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M45 10 L 55 18 L 65 10" stroke="#7E22CE" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round"/>
-          <text x="85" y="42" fontFamily="sans-serif" fontSize="32" fontWeight="bold" fill="#7E22CE">ecossistema</text>
-          <text x="85" y="65" fontFamily="sans-serif" fontSize="24" fontWeight="bold" fill="#7E22CE">ânima</text>
-        </svg>
+      <div className="absolute top-8 left-0 right-0 flex justify-center">
+        <h1 className="text-2xl font-light text-gray-700 tracking-wide">
+          Ecossistema <span className="font-semibold text-purple-700">Ânima</span>
+        </h1>
       </div>
 
       <main className="flex-1 flex items-center justify-center p-4">
@@ -297,7 +291,7 @@ const RecuperarSenhaScreen = ({ onBack }: { onBack: () => void }) => {
   );
 };
 
-const MicrosoftSelectionScreen = ({ username, onSelectAccount, onBack }: { username: string, onSelectAccount: () => void, onBack: () => void }) => {
+const MicrosoftSelectionScreen = ({ username, onSelectAccount, onBack, profileImage }: { username: string, onSelectAccount: () => void, onBack: () => void, profileImage: string }) => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 to-gray-900 flex items-center justify-center p-4 font-sans">
       <div className="bg-white rounded-lg shadow-2xl w-full max-w-[440px] overflow-hidden">
@@ -316,8 +310,8 @@ const MicrosoftSelectionScreen = ({ username, onSelectAccount, onBack }: { usern
               onClick={onSelectAccount}
               className="w-full flex items-center gap-4 p-3 -mx-3 hover:bg-gray-50 transition-colors rounded-lg text-left group"
             >
-              <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 shrink-0 group-hover:bg-purple-100 group-hover:text-purple-600 transition-colors">
-                <User size={24} />
+              <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 shrink-0 group-hover:bg-purple-100 group-hover:text-purple-600 transition-colors overflow-hidden">
+                <img src={profileImage} alt="Perfil" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-base font-bold text-gray-900 truncate">Jefherson Luiz da Silva</p>
@@ -366,12 +360,7 @@ const Sidebar = ({ currentView, setCurrentView }: { currentView: string, setCurr
   ];
 
   return (
-    <aside className="w-24 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 flex-col items-center py-6 hidden md:flex shrink-0 transition-colors">
-      <div className="mb-8">
-        <div className="w-12 h-12 bg-purple-600 rounded-xl flex items-center justify-center text-white font-bold text-2xl shadow-sm">
-          U
-        </div>
-      </div>
+    <aside className="w-24 bg-white dark:bg-zinc-950 border-r border-gray-200 dark:border-zinc-800 flex-col items-center py-6 hidden md:flex shrink-0 transition-colors">
       <nav className="flex flex-col gap-2 w-full px-2">
         {navItems.map((item) => {
           const isActive = currentView === item.id;
@@ -395,7 +384,7 @@ const Sidebar = ({ currentView, setCurrentView }: { currentView: string, setCurr
   );
 };
 
-const TopNavbar = ({ isDarkMode, toggleDarkMode, onLogout, onNavigate }: { isDarkMode: boolean, toggleDarkMode: () => void, onLogout: () => void, onNavigate: (view: string) => void }) => {
+const TopNavbar = ({ isDarkMode, toggleDarkMode, onLogout, onNavigate, onNavigateHome, profileImage }: { isDarkMode: boolean, toggleDarkMode: () => void, onLogout: () => void, onNavigate: (view: string) => void, onNavigateHome: () => void, profileImage: string }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
@@ -416,17 +405,19 @@ const TopNavbar = ({ isDarkMode, toggleDarkMode, onLogout, onNavigate }: { isDar
           </button>
           
           <button 
-            onClick={() => onNavigate('dashboard')}
+            onClick={onNavigateHome}
             className="hidden md:flex items-center gap-3 mr-4 hover:opacity-80 transition-opacity"
           >
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M8 4 L 16 12 L 8 20" stroke="#A3C613" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
             <div className="h-6 w-px bg-gray-300 dark:bg-zinc-700"></div>
-            <span className="text-xl font-bold text-purple-600 dark:text-purple-500 tracking-tight">Ulife</span>
+            <div className="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-xl shadow-sm">
+              U
+            </div>
           </button>
 
-          <div className="flex-1 max-w-xl hidden sm:block relative">
+          <div className="flex-1 max-w-2xl hidden sm:block relative mx-auto">
             <div className="relative group">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-purple-500 transition-colors" size={18} />
               <input
@@ -493,7 +484,7 @@ const TopNavbar = ({ isDarkMode, toggleDarkMode, onLogout, onNavigate }: { isDar
                 <p className="text-[11px] text-gray-500 dark:text-gray-400 font-medium">ADS • 3º Semestre</p>
               </div>
               <img
-                src="https://picsum.photos/seed/jefherson/100/100"
+                src={profileImage}
                 alt="Perfil"
                 className="w-9 h-9 rounded-full object-cover ring-2 ring-purple-100 dark:ring-purple-900/50"
                 referrerPolicy="no-referrer"
@@ -648,14 +639,14 @@ const UrgentTasks = () => {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {tasks.map((task, idx) => (
-          <div key={idx} className="bg-white dark:bg-gray-800 rounded-xl p-5 border border-orange-100 dark:border-orange-900/30 shadow-sm flex items-start gap-4 hover:shadow-md transition-all group">
-            <div className="bg-orange-50 dark:bg-orange-900/20 p-3 rounded-lg text-orange-600 dark:text-orange-400 shrink-0">
+          <div key={idx} className="bg-white dark:bg-zinc-800 rounded-xl p-5 border border-gray-200 dark:border-zinc-700 shadow-sm flex items-start gap-4 hover:shadow-md transition-all group">
+            <div className="bg-gray-50 dark:bg-zinc-900 p-3 rounded-lg text-purple-600 dark:text-purple-400 shrink-0">
               <FileText size={24} />
             </div>
             <div className="flex-1">
-              <h4 className="font-bold text-gray-900 dark:text-white text-base leading-tight mb-1 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">{task.title}</h4>
+              <h4 className="font-bold text-gray-900 dark:text-white text-base leading-tight mb-1 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">{task.title}</h4>
               <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">{task.subject}</p>
-              <div className="flex items-center gap-1.5 text-xs font-semibold text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-900/20 w-fit px-2 py-1 rounded-md">
+              <div className="flex items-center gap-1.5 text-xs font-semibold text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-zinc-900 w-fit px-2 py-1 rounded-md">
                 <Clock size={12} />
                 Vence: {task.dueDate}
               </div>
@@ -672,10 +663,10 @@ const UrgentTasks = () => {
 
 const QuickShortcuts = () => {
   const shortcuts = [
-    { icon: Receipt, label: 'Emitir Boleto', color: 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 border-emerald-100 dark:border-emerald-800/30 hover:bg-emerald-100 dark:hover:bg-emerald-900/40' },
-    { icon: FileCheck, label: 'Atestado de Matrícula', color: 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 border-blue-100 dark:border-blue-800/30 hover:bg-blue-100 dark:hover:bg-blue-900/40' },
-    { icon: Calendar, label: 'Calendário Acadêmico', color: 'bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400 border-orange-100 dark:border-orange-800/30 hover:bg-orange-100 dark:hover:bg-orange-900/40' },
-    { icon: CheckSquare, label: 'Atividades Complementares', color: 'bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 border-purple-100 dark:border-purple-800/30 hover:bg-purple-100 dark:hover:bg-purple-900/40' },
+    { icon: Receipt, label: 'Emitir Boleto', color: 'bg-white dark:bg-zinc-800 border-gray-200 dark:border-zinc-700 hover:bg-gray-50 dark:hover:bg-zinc-700/50' },
+    { icon: FileCheck, label: 'Atestado de Matrícula', color: 'bg-white dark:bg-zinc-800 border-gray-200 dark:border-zinc-700 hover:bg-gray-50 dark:hover:bg-zinc-700/50' },
+    { icon: Calendar, label: 'Calendário Acadêmico', color: 'bg-white dark:bg-zinc-800 border-gray-200 dark:border-zinc-700 hover:bg-gray-50 dark:hover:bg-zinc-700/50' },
+    { icon: CheckSquare, label: 'Atividades Complementares', color: 'bg-white dark:bg-zinc-800 border-gray-200 dark:border-zinc-700 hover:bg-gray-50 dark:hover:bg-zinc-700/50' },
   ];
 
   return (
@@ -684,10 +675,10 @@ const QuickShortcuts = () => {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {shortcuts.map((shortcut, idx) => (
           <button key={idx} className={`p-4 rounded-xl border transition-colors flex items-center gap-3 text-left group ${shortcut.color}`}>
-            <div className="p-2 bg-white dark:bg-gray-800 rounded-lg shadow-sm group-hover:scale-110 transition-transform">
+            <div className="p-2 bg-gray-50 dark:bg-zinc-900 rounded-lg shadow-sm group-hover:scale-110 transition-transform text-purple-600 dark:text-purple-400">
               <shortcut.icon size={20} strokeWidth={2.5} />
             </div>
-            <span className="text-sm font-semibold leading-tight">{shortcut.label}</span>
+            <span className="text-sm font-semibold leading-tight text-gray-700 dark:text-gray-200">{shortcut.label}</span>
           </button>
         ))}
       </div>
@@ -964,24 +955,21 @@ const RecordedClassesView = () => {
   );
 };
 
-const MeusDadosScreen = () => {
+const MeusDadosScreen = ({ profileImage, setProfileImage }: { profileImage: string, setProfileImage: (img: string) => void }) => {
   const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [termsAccepted, setTermsAccepted] = useState(false);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        setSelectedImage(event.target?.result as string);
-      };
-      reader.readAsDataURL(e.target.files[0]);
+      const url = URL.createObjectURL(e.target.files[0]);
+      setSelectedImage(url);
     }
   };
 
   const handleSavePhoto = () => {
     if (selectedImage && termsAccepted) {
-      // Logic to save photo would go here
+      setProfileImage(selectedImage);
       setIsPhotoModalOpen(false);
       setSelectedImage(null);
       setTermsAccepted(false);
@@ -1016,7 +1004,7 @@ const MeusDadosScreen = () => {
             onClick={() => setIsPhotoModalOpen(true)}
           >
             <img
-              src="https://picsum.photos/seed/jefherson/200/200"
+              src={profileImage}
               alt="Perfil"
               className="w-32 h-32 rounded-full object-cover ring-4 ring-purple-50 dark:ring-purple-900/20 group-hover:brightness-75 transition-all"
               referrerPolicy="no-referrer"
@@ -1071,7 +1059,7 @@ const MeusDadosScreen = () => {
               <div className="flex flex-col items-center gap-2">
                 <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Imagem atual</span>
                 <img
-                  src={selectedImage || "https://picsum.photos/seed/jefherson/200/200"}
+                  src={selectedImage || profileImage}
                   alt="Pré-visualização"
                   className="w-32 h-32 rounded-lg object-cover border border-gray-200 dark:border-zinc-700"
                   referrerPolicy="no-referrer"
@@ -1100,7 +1088,7 @@ const MeusDadosScreen = () => {
                     onChange={(e) => setTermsAccepted(e.target.checked)}
                   />
                   <span className="text-sm text-gray-600 dark:text-gray-400">
-                    Eu declaro ter todos os direitos legais sobre a imagem e não violar o <a href="#" className="text-purple-600 hover:underline">Termos de Uso</a>
+                    Eu declaro ter todos os direitos legais sobre a imagem e não violar o <a href="https://www.ulife.com.br/Controls/RequestFile.aspx?id=17" target="_blank" rel="noopener noreferrer" className="text-purple-600 hover:underline">Termos de Uso</a>
                   </span>
                 </label>
                 
@@ -1124,7 +1112,7 @@ const MeusDadosScreen = () => {
   );
 };
 
-const DashboardScreen = ({ onLogout }: { onLogout: () => void }) => {
+const DashboardScreen = ({ onLogout, onNavigateHome, profileImage, setProfileImage }: { onLogout: () => void, onNavigateHome: () => void, profileImage: string, setProfileImage: (img: string) => void }) => {
   const [currentView, setCurrentView] = useState('home');
   const [isDarkMode, setIsDarkMode] = useState(false);
 
@@ -1147,7 +1135,7 @@ const DashboardScreen = ({ onLogout }: { onLogout: () => void }) => {
       case 'recorded':
         return <RecordedClassesView />;
       case 'meus-dados':
-        return <MeusDadosScreen />;
+        return <MeusDadosScreen profileImage={profileImage} setProfileImage={setProfileImage} />;
       default:
         return (
           <div className="flex flex-col items-center justify-center h-64 text-gray-500 dark:text-gray-400">
@@ -1163,7 +1151,7 @@ const DashboardScreen = ({ onLogout }: { onLogout: () => void }) => {
       <Sidebar currentView={currentView} setCurrentView={setCurrentView} />
       
       <div className="flex-1 flex flex-col h-full overflow-hidden relative">
-        <TopNavbar isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} onLogout={onLogout} onNavigate={setCurrentView} />
+        <TopNavbar isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} onLogout={onLogout} onNavigate={setCurrentView} onNavigateHome={onNavigateHome} profileImage={profileImage} />
         
         <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 pb-20">
           {renderView()}
@@ -1176,6 +1164,7 @@ const DashboardScreen = ({ onLogout }: { onLogout: () => void }) => {
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<'login' | 'microsoft-selection' | 'dashboard' | 'recuperar-senha'>('login');
   const [username, setUsername] = useState('');
+  const [profileImage, setProfileImage] = useState('https://picsum.photos/seed/jefherson/200/200');
 
   const handleLogin = (user: string) => {
     setUsername(user);
@@ -1198,10 +1187,16 @@ export default function App() {
           username={username} 
           onSelectAccount={() => setCurrentScreen('dashboard')} 
           onBack={() => setCurrentScreen('login')} 
+          profileImage={profileImage}
         />
       )}
       {currentScreen === 'dashboard' && (
-        <DashboardScreen onLogout={() => setCurrentScreen('login')} />
+        <DashboardScreen 
+          onLogout={() => setCurrentScreen('login')} 
+          onNavigateHome={() => setCurrentScreen('dashboard')}
+          profileImage={profileImage}
+          setProfileImage={setProfileImage}
+        />
       )}
     </>
   );
