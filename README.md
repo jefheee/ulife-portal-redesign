@@ -46,3 +46,17 @@ Este projeto foi construído utilizando as seguintes tecnologias:
 1. Clone este repositório:
    ```bash
    git clone [https://github.com/jefheee/ulife-portal-redesign.git](https://github.com/jefheee/ulife-portal-redesign.git)
+
+2. Acesse a pasta do projeto:
+   ```bash
+   cd ulife-portal-redesign
+
+3. Instale as dependências:
+   ```bash
+   npm install
+
+4. Inicie o servidor de desenvolvimento:
+   ```bash
+   npm run dev
+
+*Desenvolvido com dedicação por [Jefherson Luiz](https://www.google.com/search?q=https://github.com/jefheee).*
