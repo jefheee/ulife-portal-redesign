@@ -50,14 +50,14 @@ const LoginScreen = ({ onLogin, onRecoverPassword }: { onLogin: (username: strin
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col font-sans">
-      <header className="bg-purple-950 h-16 flex items-center px-6 shadow-md shrink-0">
-        <div className="flex items-center gap-2 text-white">
-          <div className="w-8 h-8 bg-white/10 rounded flex items-center justify-center font-bold text-lg">
-            Â
-          </div>
-          <span className="font-semibold tracking-tight">ecossistema ânima</span>
-        </div>
-      </header>
+      <div className="absolute top-6 left-6 sm:top-8 sm:left-8">
+        <svg width="120" height="40" viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M40 20 V 40 C 40 50 45 55 55 55 C 65 55 70 50 70 40 V 20" stroke="#7E22CE" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round"/>
+          <path d="M45 10 L 55 18 L 65 10" stroke="#7E22CE" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round"/>
+          <text x="85" y="42" fontFamily="sans-serif" fontSize="32" fontWeight="bold" fill="#7E22CE">ecossistema</text>
+          <text x="85" y="65" fontFamily="sans-serif" fontSize="24" fontWeight="bold" fill="#7E22CE">ânima</text>
+        </svg>
+      </div>
 
       <div className="flex-1 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
@@ -207,14 +207,14 @@ const RecuperarSenhaScreen = ({ onBack }: { onBack: () => void }) => {
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col font-sans">
-      <header className="bg-purple-950 h-16 flex items-center px-6 shadow-md shrink-0">
-        <div className="flex items-center gap-2 text-white">
-          <div className="w-8 h-8 bg-white/10 rounded flex items-center justify-center font-bold text-lg">
-            Â
-          </div>
-          <span className="font-semibold tracking-tight">ecossistema ânima</span>
-        </div>
-      </header>
+      <div className="absolute top-6 left-6 sm:top-8 sm:left-8">
+        <svg width="120" height="40" viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M40 20 V 40 C 40 50 45 55 55 55 C 65 55 70 50 70 40 V 20" stroke="#7E22CE" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round"/>
+          <path d="M45 10 L 55 18 L 65 10" stroke="#7E22CE" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round"/>
+          <text x="85" y="42" fontFamily="sans-serif" fontSize="32" fontWeight="bold" fill="#7E22CE">ecossistema</text>
+          <text x="85" y="65" fontFamily="sans-serif" fontSize="24" fontWeight="bold" fill="#7E22CE">ânima</text>
+        </svg>
+      </div>
 
       <main className="flex-1 flex items-center justify-center p-4">
         <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-200 max-w-md w-full">
@@ -415,12 +415,16 @@ const TopNavbar = ({ isDarkMode, toggleDarkMode, onLogout, onNavigate }: { isDar
             <Menu size={24} />
           </button>
           
-          <div className="hidden md:flex items-center gap-2 mr-4">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <button 
+            onClick={() => onNavigate('dashboard')}
+            className="hidden md:flex items-center gap-3 mr-4 hover:opacity-80 transition-opacity"
+          >
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M8 4 L 16 12 L 8 20" stroke="#A3C613" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
-            <span className="text-xl font-bold text-purple-600 tracking-tight">Ulife</span>
-          </div>
+            <div className="h-6 w-px bg-gray-300 dark:bg-zinc-700"></div>
+            <span className="text-xl font-bold text-purple-600 dark:text-purple-500 tracking-tight">Ulife</span>
+          </button>
 
           <div className="flex-1 max-w-xl hidden sm:block relative">
             <div className="relative group">
@@ -961,6 +965,29 @@ const RecordedClassesView = () => {
 };
 
 const MeusDadosScreen = () => {
+  const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [termsAccepted, setTermsAccepted] = useState(false);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setSelectedImage(event.target?.result as string);
+      };
+      reader.readAsDataURL(e.target.files[0]);
+    }
+  };
+
+  const handleSavePhoto = () => {
+    if (selectedImage && termsAccepted) {
+      // Logic to save photo would go here
+      setIsPhotoModalOpen(false);
+      setSelectedImage(null);
+      setTermsAccepted(false);
+    }
+  };
+
   return (
     <div className="max-w-4xl mx-auto space-y-8">
       <div>
@@ -984,7 +1011,10 @@ const MeusDadosScreen = () => {
 
       <div className="bg-white dark:bg-zinc-800 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-700 p-6 sm:p-8 relative">
         <div className="flex flex-col sm:flex-row gap-8 items-start">
-          <div className="shrink-0 relative group cursor-pointer">
+          <div 
+            className="shrink-0 relative group cursor-pointer"
+            onClick={() => setIsPhotoModalOpen(true)}
+          >
             <img
               src="https://picsum.photos/seed/jefherson/200/200"
               alt="Perfil"
@@ -1026,6 +1056,70 @@ const MeusDadosScreen = () => {
           </div>
         </div>
       </div>
+
+      {isPhotoModalOpen && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-xl max-w-2xl w-full overflow-hidden flex flex-col">
+            <div className="flex justify-between items-center p-6 border-b border-gray-100 dark:border-zinc-800">
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white">Alterar Foto de Perfil</h3>
+              <button onClick={() => setIsPhotoModalOpen(false)} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+                <X size={24} />
+              </button>
+            </div>
+            
+            <div className="p-6 flex flex-col sm:flex-row gap-8">
+              <div className="flex flex-col items-center gap-2">
+                <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Imagem atual</span>
+                <img
+                  src={selectedImage || "https://picsum.photos/seed/jefherson/200/200"}
+                  alt="Pré-visualização"
+                  className="w-32 h-32 rounded-lg object-cover border border-gray-200 dark:border-zinc-700"
+                  referrerPolicy="no-referrer"
+                />
+              </div>
+              
+              <div className="flex-1 space-y-6">
+                <div>
+                  <span className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Inserir imagem</span>
+                  <div className="flex items-center gap-3">
+                    <label className="cursor-pointer bg-gray-100 hover:bg-gray-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-gray-700 dark:text-gray-200 px-4 py-2 rounded-md border border-gray-300 dark:border-zinc-600 text-sm font-medium transition-colors">
+                      Escolher arquivo
+                      <input type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
+                    </label>
+                    <span className="text-sm text-gray-500 dark:text-gray-400">
+                      {selectedImage ? "Arquivo selecionado" : "Nenhum arquivo escolhido"}
+                    </span>
+                  </div>
+                </div>
+                
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input 
+                    type="checkbox" 
+                    className="mt-1 rounded border-gray-300 text-purple-600 focus:ring-purple-500"
+                    checked={termsAccepted}
+                    onChange={(e) => setTermsAccepted(e.target.checked)}
+                  />
+                  <span className="text-sm text-gray-600 dark:text-gray-400">
+                    Eu declaro ter todos os direitos legais sobre a imagem e não violar o <a href="#" className="text-purple-600 hover:underline">Termos de Uso</a>
+                  </span>
+                </label>
+                
+                <button 
+                  onClick={handleSavePhoto}
+                  disabled={!selectedImage || !termsAccepted}
+                  className={`w-full sm:w-auto px-6 py-2.5 rounded-lg font-bold text-white transition-colors ${
+                    selectedImage && termsAccepted 
+                      ? 'bg-purple-600 hover:bg-purple-700 shadow-sm' 
+                      : 'bg-gray-300 dark:bg-zinc-700 cursor-not-allowed'
+                  }`}
+                >
+                  Salvar foto
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
