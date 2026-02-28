@@ -1,13 +1,45 @@
-import React, { useState } from 'react';
-import { GraduationCap, HelpCircle, Users, User, Plus } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import {
+  Home,
+  BookOpen,
+  Calendar,
+  GraduationCap,
+  DollarSign,
+  Briefcase,
+  Search,
+  Bell,
+  PlayCircle,
+  Clock,
+  Play,
+  FileText,
+  CheckSquare,
+  FileCheck,
+  Receipt,
+  Menu,
+  MoreHorizontal,
+  Moon,
+  Sun,
+  AlertCircle,
+  Video,
+  HelpCircle,
+  Users,
+  User,
+  Plus,
+  X
+} from 'lucide-react';
 
-const LoginScreen = ({ onLogin }: { onLogin: (username: string) => void }) => {
+// --- LOGIN & AUTH SCREENS ---
+
+const LoginScreen = ({ onLogin, onRecoverPassword }: { onLogin: (username: string) => void, onRecoverPassword: () => void }) => {
   const [username, setUsername] = useState('');
   const [error, setError] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (username.trim().length < 5) {
+    // Validação Rigorosa: SOMENTE números, no mínimo 5 dígitos
+    const isValid = /^\d{5,}$/.test(username.trim());
+    if (!isValid) {
       setError(true);
     } else {
       setError(false);
@@ -34,7 +66,7 @@ const LoginScreen = ({ onLogin }: { onLogin: (username: string) => void }) => {
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <label htmlFor="username" className="block text-sm font-semibold text-gray-700 mb-2">
-                RA, CPF ou Nome de Usuário
+                Login
               </label>
               {error && (
                 <p className="text-red-500 text-sm font-medium mb-1.5">
@@ -91,18 +123,107 @@ const LoginScreen = ({ onLogin }: { onLogin: (username: string) => void }) => {
             </div>
 
             <div className="mt-6 space-y-3">
-              <a href="#" className="w-full flex items-center justify-center gap-2 px-4 py-2.5 border border-gray-200 shadow-sm text-sm font-semibold rounded-lg text-gray-700 bg-white hover:bg-gray-50 transition-colors">
+              <button 
+                onClick={() => setIsModalOpen(true)}
+                className="w-full flex items-center justify-center gap-2 px-4 py-2.5 border border-gray-200 shadow-sm text-sm font-semibold rounded-lg text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+              >
                 <HelpCircle size={18} className="text-gray-400" />
                 Como realizar o acesso
-              </a>
-              <a href="#" className="w-full flex items-center justify-center gap-2 px-4 py-2.5 border border-gray-200 shadow-sm text-sm font-semibold rounded-lg text-gray-700 bg-white hover:bg-gray-50 transition-colors">
+              </button>
+              <button className="w-full flex items-center justify-center gap-2 px-4 py-2.5 border border-gray-200 shadow-sm text-sm font-semibold rounded-lg text-gray-700 bg-white hover:bg-gray-50 transition-colors">
                 <Users size={18} className="text-gray-400" />
                 Acessar Ulife Colaboradores
-              </a>
+              </button>
             </div>
           </div>
         </div>
       </div>
+
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-xl max-w-lg w-full overflow-hidden flex flex-col max-h-[90vh]">
+            <div className="flex justify-between items-center p-6 border-b border-gray-100 shrink-0">
+              <h3 className="text-xl font-bold text-purple-700">Orientações para realizar o acesso</h3>
+              <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-gray-600 transition-colors">
+                <X size={24} />
+              </button>
+            </div>
+            <div className="p-6 text-sm text-gray-600 space-y-4 overflow-y-auto">
+              <p>
+                Para acessar o sistema, utilize seu RA, CPF ou nome de usuário e a senha. Confira abaixo os formatos de acesso de acordo com cada perfil:
+                <br /><br />
+                Estudantes Presenciais, Semipresenciais e Live: Utilize seu RA.<br />
+                Estudantes do EAD: Utilize seu CPF.<br />
+                Docentes: Utilize seu nome de usuário.
+                <br /><br />
+                Se você não sabe seu login ou esqueceu sua senha, clique no botão Cadastrar nova senha logo abaixo. Vamos direcioná-lo para a página de Troca de Senha. Nela, você digita seu CPF e o e-mail com os próximos passos será enviado para seu email pessoal cadastrado no processo de matrícula. Depois, é só voltar aqui na tela de login e acessar sua conta com a nova senha. Se ainda tiver dúvidas, você pode acessar o <a href="#" target="_blank" rel="noopener noreferrer" className="text-purple-600 hover:underline font-medium">vídeo explicativo</a> sobre como trocar a senha.
+              </p>
+            </div>
+            <div className="p-6 bg-gray-50 border-t border-gray-100 flex justify-center shrink-0">
+              <button 
+                onClick={() => { setIsModalOpen(false); onRecoverPassword(); }} 
+                className="bg-[#0078D4] hover:bg-[#106EBE] text-white font-bold py-3 px-6 rounded-lg transition-colors w-full sm:w-auto shadow-sm"
+              >
+                CADASTRAR NOVA SENHA
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+const RecuperarSenhaScreen = ({ onBack }: { onBack: () => void }) => {
+  return (
+    <div className="min-h-screen bg-gray-100 flex flex-col font-sans">
+      <header className="bg-[#00143C] h-16 flex items-center px-6 shadow-md shrink-0">
+        <div className="flex items-center gap-2 text-white">
+          <div className="w-8 h-8 bg-white/10 rounded flex items-center justify-center font-bold text-lg">
+            Â
+          </div>
+          <span className="font-semibold tracking-tight">ecossistema ânima</span>
+        </div>
+      </header>
+
+      <main className="flex-1 flex items-center justify-center p-4">
+        <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-200 max-w-md w-full">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Recuperação de Senha</h2>
+          <p className="text-sm text-gray-600 mb-6 bg-blue-50 p-4 rounded-lg border border-blue-100">
+            Ao utilizar esta função, caso não receba o e-mail de recuperação de senha em um de seus e-mails pessoais, por favor entre em contato com os canais oficiais de atendimento.
+          </p>
+          
+          <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+            <div>
+              <label htmlFor="recovery-input" className="block text-sm font-semibold text-gray-700 mb-2">
+                Informe seu RA (número de matrícula), login ou cpf: *
+              </label>
+              <input
+                id="recovery-input"
+                type="text"
+                required
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all"
+              />
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={onBack}
+                className="flex-1 py-2.5 px-4 border border-gray-300 rounded-lg shadow-sm text-sm font-bold text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+              >
+                Voltar
+              </button>
+              <button
+                type="submit"
+                className="flex-1 py-2.5 px-4 border border-transparent rounded-lg shadow-sm text-sm font-bold text-white bg-purple-600 hover:bg-purple-700 transition-colors"
+              >
+                Enviar
+              </button>
+            </div>
+          </form>
+        </div>
+      </main>
     </div>
   );
 };
@@ -162,19 +283,507 @@ const MicrosoftSelectionScreen = ({ username, onSelectAccount, onBack }: { usern
   );
 };
 
-const DashboardScreen = () => {
+// --- DASHBOARD SCREENS ---
+
+const Sidebar = ({ currentView, setCurrentView }: { currentView: string, setCurrentView: (view: string) => void }) => {
+  const navItems = [
+    { id: 'home', icon: Home, label: 'Início' },
+    { id: 'ucs', icon: BookOpen, label: 'Minhas UCs' },
+    { id: 'schedule', icon: Calendar, label: 'Quadro de Aulas' },
+    { id: 'recorded', icon: Video, label: 'Aulas Gravadas' },
+    { id: 'grades', icon: GraduationCap, label: 'Notas' },
+    { id: 'finance', icon: DollarSign, label: 'Financeiro' },
+    { id: 'services', icon: Briefcase, label: 'Serviços' },
+  ];
+
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 font-sans">
-      <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-200 text-center max-w-md w-full">
-        <h1 className="text-2xl font-bold text-gray-900 mb-2 tracking-tight">Bem-vindo ao Dashboard</h1>
-        <p className="text-gray-500 font-medium">[Em Construção]</p>
+    <aside className="w-24 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 flex-col items-center py-6 hidden md:flex shrink-0 transition-colors">
+      <div className="mb-8">
+        <div className="w-12 h-12 bg-purple-600 rounded-xl flex items-center justify-center text-white font-bold text-2xl shadow-sm">
+          U
+        </div>
+      </div>
+      <nav className="flex flex-col gap-2 w-full px-2">
+        {navItems.map((item) => {
+          const isActive = currentView === item.id;
+          return (
+            <button
+              key={item.id}
+              onClick={() => setCurrentView(item.id)}
+              className={`flex flex-col items-center justify-center w-full gap-1.5 py-3 px-1 rounded-xl transition-all ${
+                isActive 
+                  ? 'text-purple-700 dark:text-purple-400 bg-purple-50 dark:bg-purple-900/30 font-semibold' 
+                  : 'text-gray-500 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-300 hover:bg-gray-50 dark:hover:bg-gray-800 font-medium'
+              }`}
+            >
+              <item.icon size={22} strokeWidth={isActive ? 2.5 : 2} />
+              <span className="text-[10px] text-center leading-tight">{item.label}</span>
+            </button>
+          );
+        })}
+      </nav>
+    </aside>
+  );
+};
+
+const TopNavbar = ({ isDarkMode, toggleDarkMode }: { isDarkMode: boolean, toggleDarkMode: () => void }) => {
+  return (
+    <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 h-16 flex items-center justify-between px-4 sm:px-6 sticky top-0 z-20 shrink-0 transition-colors">
+      <div className="flex items-center gap-4 flex-1">
+        <button className="md:hidden p-2 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg">
+          <Menu size={24} />
+        </button>
+        
+        <div className="flex-1 max-w-xl hidden sm:block">
+          <div className="relative group">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-purple-500 transition-colors" size={18} />
+            <input
+              type="text"
+              placeholder="Pesquisar aulas, serviços, documentos..."
+              className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full text-sm focus:bg-white dark:focus:bg-gray-900 focus:border-purple-500 dark:focus:border-purple-500 focus:ring-4 focus:ring-purple-50 dark:focus:ring-purple-900/20 outline-none transition-all dark:text-white dark:placeholder-gray-400"
+            />
+          </div>
+        </div>
+      </div>
+      
+      <div className="flex items-center gap-2 sm:gap-4 ml-4">
+        <button 
+          onClick={toggleDarkMode}
+          className="p-2 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
+        >
+          {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+        </button>
+
+        <button className="relative p-2 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors">
+          <Bell size={20} />
+          <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full ring-2 ring-white dark:ring-gray-900"></span>
+        </button>
+        
+        <div className="flex items-center gap-3 pl-2 sm:pl-4 border-l border-gray-200 dark:border-gray-800 cursor-pointer hover:opacity-80 transition-opacity">
+          <div className="text-right hidden sm:block">
+            <p className="text-sm font-semibold text-gray-900 dark:text-white leading-tight">Jefherson</p>
+            <p className="text-[11px] text-gray-500 dark:text-gray-400 font-medium">ADS • 3º Semestre</p>
+          </div>
+          <img
+            src="https://picsum.photos/seed/jefherson/100/100"
+            alt="Perfil"
+            className="w-9 h-9 rounded-full object-cover ring-2 ring-purple-100 dark:ring-purple-900/50"
+            referrerPolicy="no-referrer"
+          />
+        </div>
+      </div>
+    </header>
+  );
+};
+
+const HeroCard = () => {
+  return (
+    <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative overflow-hidden group transition-colors">
+      <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-purple-50 to-purple-100/50 dark:from-purple-900/20 dark:to-purple-800/10 rounded-full -translate-y-1/2 translate-x-1/3 opacity-60 pointer-events-none group-hover:scale-110 transition-transform duration-700"></div>
+      
+      <div className="relative z-10 max-w-2xl">
+        <div className="flex flex-wrap items-center gap-2 mb-3">
+          <span className="bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider flex items-center gap-1.5 border border-red-100 dark:border-red-800/50">
+            <span className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse"></span>
+            Ao Vivo Agora
+          </span>
+          <span className="text-sm text-gray-500 dark:text-gray-400 font-medium flex items-center gap-1.5 bg-gray-50 dark:bg-gray-900 px-2.5 py-1 rounded-full border border-gray-100 dark:border-gray-700">
+            <Clock size={14} className="text-gray-400 dark:text-gray-500" /> Hoje, 19:00 às 21:50
+          </span>
+        </div>
+        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2 tracking-tight">Interação Humano Computador e UX</h2>
+        <p className="text-gray-500 dark:text-gray-400 font-medium flex items-center gap-2">
+          Prof. Armando Cardoso <span className="w-1 h-1 bg-gray-300 dark:bg-gray-600 rounded-full"></span> Sala Virtual (Teams)
+        </p>
+      </div>
+      
+      <button className="relative z-10 bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3.5 px-6 rounded-xl shadow-sm hover:shadow-md hover:shadow-purple-200 dark:hover:shadow-purple-900/30 transition-all flex items-center gap-2.5 whitespace-nowrap w-full md:w-auto justify-center active:scale-95">
+        <PlayCircle size={20} className="animate-pulse" />
+        Acessar Aula Ao Vivo
+      </button>
+    </div>
+  );
+};
+
+const UrgentTasks = () => {
+  const tasks = [
+    { title: 'Arquitetura da Informação parte 1', dueDate: '27/02/2026 às 23:59', subject: 'Interação Humano Computador e UX' },
+    { title: 'Atividade Figma', dueDate: '27/02/2026 às 23:59', subject: 'Interação Humano Computador e UX' }
+  ];
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center gap-2">
+        <AlertCircle className="text-orange-500" size={20} />
+        <h3 className="text-lg font-bold text-gray-900 dark:text-white tracking-tight">Prazos Próximos</h3>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {tasks.map((task, idx) => (
+          <div key={idx} className="bg-white dark:bg-gray-800 rounded-xl p-5 border border-orange-100 dark:border-orange-900/30 shadow-sm flex items-start gap-4 hover:shadow-md transition-all group">
+            <div className="bg-orange-50 dark:bg-orange-900/20 p-3 rounded-lg text-orange-600 dark:text-orange-400 shrink-0">
+              <FileText size={24} />
+            </div>
+            <div className="flex-1">
+              <h4 className="font-bold text-gray-900 dark:text-white text-base leading-tight mb-1 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">{task.title}</h4>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">{task.subject}</p>
+              <div className="flex items-center gap-1.5 text-xs font-semibold text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-900/20 w-fit px-2 py-1 rounded-md">
+                <Clock size={12} />
+                Vence: {task.dueDate}
+              </div>
+            </div>
+            <button className="text-sm font-semibold text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 bg-purple-50 dark:bg-purple-900/30 px-4 py-2 rounded-lg transition-colors">
+              Fazer
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const QuickShortcuts = () => {
+  const shortcuts = [
+    { icon: Receipt, label: 'Emitir Boleto', color: 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 border-emerald-100 dark:border-emerald-800/30 hover:bg-emerald-100 dark:hover:bg-emerald-900/40' },
+    { icon: FileCheck, label: 'Atestado de Matrícula', color: 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 border-blue-100 dark:border-blue-800/30 hover:bg-blue-100 dark:hover:bg-blue-900/40' },
+    { icon: Calendar, label: 'Calendário Acadêmico', color: 'bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400 border-orange-100 dark:border-orange-800/30 hover:bg-orange-100 dark:hover:bg-orange-900/40' },
+    { icon: CheckSquare, label: 'Atividades Complementares', color: 'bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 border-purple-100 dark:border-purple-800/30 hover:bg-purple-100 dark:hover:bg-purple-900/40' },
+  ];
+
+  return (
+    <div className="space-y-3">
+      <h3 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider">Atalhos Rápidos</h3>
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        {shortcuts.map((shortcut, idx) => (
+          <button key={idx} className={`p-4 rounded-xl border transition-colors flex items-center gap-3 text-left group ${shortcut.color}`}>
+            <div className="p-2 bg-white dark:bg-gray-800 rounded-lg shadow-sm group-hover:scale-110 transition-transform">
+              <shortcut.icon size={20} strokeWidth={2.5} />
+            </div>
+            <span className="text-sm font-semibold leading-tight">{shortcut.label}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const SubjectsGrid = () => {
+  const subjects = [
+    {
+      name: 'Interação Humano Computador e UX',
+      code: 'ADS1AN-PBB1-68615550',
+      type: 'Prática (Presencial)',
+      progress: 16,
+      imageSeed: 'uxdesign',
+      color: 'purple'
+    },
+    {
+      name: 'Matemática Computacional Aplicada',
+      code: 'ADS1AN-PBB-68612179',
+      type: 'Teórica (Presencial)',
+      progress: 1,
+      imageSeed: 'math',
+      color: 'blue'
+    },
+    {
+      name: 'Programação de Soluções Computacionais',
+      code: 'ADS1AN-PBB1-68606221',
+      type: 'UA Imersiva',
+      progress: 45,
+      imageSeed: 'coding',
+      color: 'emerald'
+    }
+  ];
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <h3 className="text-lg font-bold text-gray-900 dark:text-white tracking-tight">Minhas UCs em Andamento</h3>
+        <button className="text-sm text-purple-600 dark:text-purple-400 font-semibold hover:text-purple-700 dark:hover:text-purple-300 hover:underline underline-offset-4 transition-all">Ver todas</button>
+      </div>
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 sm:gap-6">
+        {subjects.map((subject, idx) => (
+          <div key={idx} className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden flex flex-col hover:shadow-md hover:border-purple-100 dark:hover:border-purple-900/50 transition-all group">
+            <div className="h-28 relative bg-gray-100 dark:bg-gray-900 overflow-hidden">
+              <img 
+                src={`https://picsum.photos/seed/${subject.imageSeed}/400/200?blur=2`} 
+                alt={subject.name}
+                className="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-500"
+                referrerPolicy="no-referrer"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-gray-900/20 to-transparent"></div>
+              <div className="absolute bottom-3 left-4 right-4 flex justify-between items-end">
+                <span className="bg-white/20 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-md uppercase tracking-wider border border-white/10 shadow-sm">
+                  {subject.type}
+                </span>
+                <button className="text-white/80 hover:text-white transition-colors">
+                  <MoreHorizontal size={20} />
+                </button>
+              </div>
+            </div>
+            
+            <div className="p-5 flex-1 flex flex-col">
+              <h4 className="font-bold text-gray-900 dark:text-white text-base leading-tight mb-1.5 line-clamp-2 group-hover:text-purple-700 dark:group-hover:text-purple-400 transition-colors" title={subject.name}>
+                {subject.name}
+              </h4>
+              <p className="text-xs text-gray-400 dark:text-gray-500 font-medium mb-5">{subject.code}</p>
+              
+              <div className="mt-auto mb-5">
+                <div className="flex justify-between items-end mb-2">
+                  <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Progresso</span>
+                  <span className="text-sm font-bold text-gray-900 dark:text-white">{subject.progress}%</span>
+                </div>
+                <div className="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-1.5 overflow-hidden">
+                  <div 
+                    className={`h-1.5 rounded-full transition-all duration-1000 ease-out bg-${subject.color}-500`}
+                    style={{ width: `${subject.progress}%` }}
+                  ></div>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-3 gap-2 border-t border-gray-100 dark:border-gray-700 pt-4">
+                <button className="flex flex-col items-center justify-center gap-1.5 py-2 text-gray-500 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20 rounded-lg transition-colors">
+                  <Play size={18} />
+                  <span className="text-[10px] font-bold uppercase tracking-wider">Continuar</span>
+                </button>
+                <button className="flex flex-col items-center justify-center gap-1.5 py-2 text-gray-500 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20 rounded-lg transition-colors">
+                  <FileText size={18} />
+                  <span className="text-[10px] font-bold uppercase tracking-wider">Material</span>
+                </button>
+                <button className="flex flex-col items-center justify-center gap-1.5 py-2 text-gray-500 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20 rounded-lg transition-colors">
+                  <CheckSquare size={18} />
+                  <span className="text-[10px] font-bold uppercase tracking-wider">Avaliações</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const DashboardHome = () => {
+  return (
+    <div className="max-w-6xl mx-auto space-y-8">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-1 tracking-tight">Olá, Jefherson! 👋</h1>
+          <p className="text-gray-500 dark:text-gray-400 font-medium">Aqui está o resumo do seu semestre. Você tem uma aula em breve.</p>
+        </div>
+        <p className="text-sm font-semibold text-gray-400 dark:text-gray-500 hidden sm:block">
+          {new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' })}
+        </p>
+      </div>
+
+      <HeroCard />
+      <UrgentTasks />
+      <QuickShortcuts />
+      <SubjectsGrid />
+    </div>
+  );
+};
+
+const ScheduleView = () => {
+  const days = [
+    { name: 'Segunda', date: '23', classes: [] },
+    { 
+      name: 'Terça', 
+      date: '24', 
+      classes: [
+        { name: 'Matemática Computacional Aplicada', time: '19h00 - 21h50', type: 'Presencial', room: 'Pedra Branca - Sala De Aula - H - 1º Andar - Pbh219', prof: 'Tamires Cristina Costa Louzada' }
+      ] 
+    },
+    { 
+      name: 'Quarta', 
+      date: '25', 
+      classes: [
+        { name: 'Matemática Computacional Aplicada', time: '19h00 - 21h50', type: 'Presencial', room: 'Pedra Branca - Sala De Aula - D - Térreo - Pb119d', prof: 'Claudio Coelho' }
+      ] 
+    },
+    { 
+      name: 'Quinta', 
+      date: '26', 
+      classes: [
+        { name: 'Interação Humano Computador e UX', time: '19h00 - 21h50', type: 'Presencial', room: 'Pedra Branca - Laboratório De Inovação Digital I - E2 - 1º Andar', prof: 'Fernando Costa' }
+      ] 
+    },
+    { 
+      name: 'Sexta', 
+      date: '27', 
+      isToday: true,
+      classes: [
+        { name: 'Interação Humano Computador e UX', time: '19h00 - 21h50', type: 'Presencial', room: 'Pedra Branca - Laboratório De Inovação Digital I - E2 - 1º Andar', prof: 'Armando Cardoso' }
+      ] 
+    },
+    { name: 'Sábado', date: '28', classes: [] },
+  ];
+
+  return (
+    <div className="max-w-6xl mx-auto space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">Quadro de Aulas</h2>
+          <p className="text-gray-500 dark:text-gray-400 font-medium">Fevereiro 2026</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <button className="px-4 py-2 text-sm font-semibold text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+            Semana Anterior
+          </button>
+          <button className="px-4 py-2 text-sm font-semibold text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+            Próxima Semana
+          </button>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        {days.map((day, idx) => (
+          <div key={idx} className="flex flex-col h-full">
+            <div className={`text-center py-3 rounded-t-xl border-t border-x ${day.isToday ? 'bg-purple-600 border-purple-600 text-white' : 'bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400'}`}>
+              <p className="text-xs font-bold uppercase tracking-wider">{day.name}</p>
+              <p className={`text-xl font-bold ${day.isToday ? 'text-white' : 'text-gray-900 dark:text-white'}`}>{day.date}</p>
+            </div>
+            <div className={`flex-1 p-3 border-b border-x rounded-b-xl border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/50 ${day.isToday ? 'border-x-purple-200 border-b-purple-200 dark:border-x-purple-900/50 dark:border-b-purple-900/50 bg-purple-50/30 dark:bg-purple-900/10' : ''}`}>
+              {day.classes.length === 0 ? (
+                <div className="h-32 flex flex-col items-center justify-center text-gray-400 dark:text-gray-500 gap-2">
+                  <BookOpen size={24} className="opacity-50" />
+                  <span className="text-xs font-medium">(sem aula)</span>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {day.classes.map((cls, cIdx) => (
+                    <div key={cIdx} className={`p-3 rounded-lg border ${day.isToday ? 'bg-white dark:bg-gray-800 border-purple-200 dark:border-purple-800 shadow-sm' : 'bg-gray-50 dark:bg-gray-800/80 border-gray-100 dark:border-gray-700'}`}>
+                      <div className="flex items-center gap-1.5 text-xs font-semibold text-purple-600 dark:text-purple-400 mb-2">
+                        <Video size={14} />
+                        {cls.type}
+                      </div>
+                      <p className="text-xs font-bold text-gray-900 dark:text-white mb-1">{cls.time}</p>
+                      <p className="text-sm font-bold text-purple-700 dark:text-purple-300 leading-tight mb-2">{cls.name}</p>
+                      <p className="text-[10px] text-gray-500 dark:text-gray-400 leading-tight mb-2">{cls.room}</p>
+                      <p className="text-[10px] font-medium text-gray-600 dark:text-gray-300 border-t border-gray-200 dark:border-gray-700 pt-2">Prof. {cls.prof}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const RecordedClassesView = () => {
+  const months = [
+    {
+      name: 'Dezembro 2025',
+      classes: [
+        { title: 'Modelagem de software', date: '12 DEZ', duration: '1h 45m' },
+        { title: 'Interação Humano Computador e UX', date: '05 DEZ', duration: '2h 10m' },
+      ]
+    },
+    {
+      name: 'Novembro 2025',
+      classes: [
+        { title: 'Matemática Computacional Aplicada', date: '28 NOV', duration: '1h 50m' },
+        { title: 'Programação de Soluções Computacionais', date: '21 NOV', duration: '2h 05m' },
+        { title: 'Modelagem de software', date: '14 NOV', duration: '1h 55m' },
+      ]
+    }
+  ];
+
+  return (
+    <div className="max-w-4xl mx-auto space-y-8">
+      <div>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white tracking-tight mb-1">Aulas Gravadas</h2>
+        <p className="text-gray-500 dark:text-gray-400 font-medium">Acesse o histórico de gravações das suas disciplinas.</p>
+      </div>
+
+      <div className="space-y-8">
+        {months.map((month, idx) => (
+          <div key={idx}>
+            <h3 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider mb-4 flex items-center gap-2">
+              <Calendar size={16} className="text-purple-600 dark:text-purple-400" />
+              {month.name}
+            </h3>
+            <div className="space-y-3">
+              {month.classes.map((cls, cIdx) => (
+                <div key={cIdx} className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:shadow-md transition-all group">
+                  <div className="flex items-start sm:items-center gap-4">
+                    <div className="bg-purple-50 dark:bg-purple-900/20 p-3 rounded-lg text-purple-600 dark:text-purple-400 shrink-0">
+                      <Video size={24} />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-gray-900 dark:text-white text-base leading-tight mb-1 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">{cls.title}</h4>
+                      <div className="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400 font-medium">
+                        <span className="flex items-center gap-1"><Calendar size={12} /> {cls.date}</span>
+                        <span className="flex items-center gap-1"><Clock size={12} /> {cls.duration}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <button className="text-sm font-semibold text-white bg-purple-600 hover:bg-purple-700 px-5 py-2.5 rounded-lg transition-colors flex items-center justify-center gap-2 w-full sm:w-auto">
+                    <PlayCircle size={18} />
+                    Acessar gravação
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const DashboardScreen = () => {
+  const [currentView, setCurrentView] = useState('home');
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [isDarkMode]);
+
+  const toggleDarkMode = () => setIsDarkMode(!isDarkMode);
+
+  const renderView = () => {
+    switch (currentView) {
+      case 'home':
+        return <DashboardHome />;
+      case 'schedule':
+        return <ScheduleView />;
+      case 'recorded':
+        return <RecordedClassesView />;
+      default:
+        return (
+          <div className="flex flex-col items-center justify-center h-64 text-gray-500 dark:text-gray-400">
+            <Briefcase size={48} className="mb-4 opacity-50" />
+            <p className="text-lg font-medium">Página em construção</p>
+          </div>
+        );
+    }
+  };
+
+  return (
+    <div className="flex h-screen w-full bg-gray-50 dark:bg-gray-950 font-sans text-gray-900 dark:text-gray-100 overflow-hidden selection:bg-purple-200 selection:text-purple-900 dark:selection:bg-purple-900 dark:selection:text-purple-100 transition-colors">
+      <Sidebar currentView={currentView} setCurrentView={setCurrentView} />
+      
+      <div className="flex-1 flex flex-col h-full overflow-hidden relative">
+        <TopNavbar isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />
+        
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 pb-20">
+          {renderView()}
+        </main>
       </div>
     </div>
   );
 };
 
 export default function App() {
-  const [currentScreen, setCurrentScreen] = useState<'login' | 'microsoft-selection' | 'dashboard'>('login');
+  const [currentScreen, setCurrentScreen] = useState<'login' | 'microsoft-selection' | 'dashboard' | 'recuperar-senha'>('login');
   const [username, setUsername] = useState('');
 
   const handleLogin = (user: string) => {
@@ -185,7 +794,13 @@ export default function App() {
   return (
     <>
       {currentScreen === 'login' && (
-        <LoginScreen onLogin={handleLogin} />
+        <LoginScreen 
+          onLogin={handleLogin} 
+          onRecoverPassword={() => setCurrentScreen('recuperar-senha')} 
+        />
+      )}
+      {currentScreen === 'recuperar-senha' && (
+        <RecuperarSenhaScreen onBack={() => setCurrentScreen('login')} />
       )}
       {currentScreen === 'microsoft-selection' && (
         <MicrosoftSelectionScreen 
@@ -200,4 +815,3 @@ export default function App() {
     </>
   );
 }
-
