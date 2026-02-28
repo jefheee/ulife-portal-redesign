@@ -26,7 +26,8 @@ import {
   User,
   Plus,
   X,
-  Pencil
+  Pencil,
+  UserCircle
 } from 'lucide-react';
 
 // --- LOGIN & AUTH SCREENS ---
@@ -293,8 +294,17 @@ const RecuperarSenhaScreen = ({ onBack }: { onBack: () => void }) => {
 
 const MicrosoftSelectionScreen = ({ username, onSelectAccount, onBack, profileImage }: { username: string, onSelectAccount: () => void, onBack: () => void, profileImage: string }) => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 to-gray-900 flex items-center justify-center p-4 font-sans">
-      <div className="bg-white rounded-lg shadow-2xl w-full max-w-[440px] overflow-hidden">
+    <div className="min-h-screen bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-purple-900 via-zinc-900 to-black flex items-center justify-center p-4 font-sans">
+      <style>{`
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
+      <div 
+        className="bg-white rounded-lg shadow-2xl w-full max-w-[440px] overflow-hidden"
+        style={{ animation: 'fadeIn 0.4s ease-out forwards' }}
+      >
         <div className="p-8 sm:p-10">
           <div className="flex items-center gap-2 mb-8">
             <div className="w-6 h-6 bg-purple-600 rounded flex items-center justify-center text-white font-bold text-xs">
@@ -311,7 +321,11 @@ const MicrosoftSelectionScreen = ({ username, onSelectAccount, onBack, profileIm
               className="w-full flex items-center gap-4 p-3 -mx-3 hover:bg-gray-50 transition-colors rounded-lg text-left group"
             >
               <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 shrink-0 group-hover:bg-purple-100 group-hover:text-purple-600 transition-colors overflow-hidden">
-                <img src={profileImage} alt="Perfil" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                {profileImage ? (
+                  <img src={profileImage} alt="Perfil" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                ) : (
+                  <UserCircle className="w-full h-full text-zinc-400" />
+                )}
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-base font-bold text-gray-900 truncate">Jefherson Luiz da Silva</p>
@@ -360,22 +374,22 @@ const Sidebar = ({ currentView, setCurrentView }: { currentView: string, setCurr
   ];
 
   return (
-    <aside className="w-24 bg-white dark:bg-zinc-950 border-r border-gray-200 dark:border-zinc-800 flex-col items-center py-6 hidden md:flex shrink-0 transition-colors">
-      <nav className="flex flex-col gap-2 w-full px-2">
+    <aside className="w-24 bg-white dark:bg-zinc-900 border-r border-gray-200 dark:border-zinc-800 flex-col items-center py-6 hidden md:flex shrink-0 transition-colors">
+      <nav className="flex flex-col gap-4 w-full px-3">
         {navItems.map((item) => {
           const isActive = currentView === item.id;
           return (
             <button
               key={item.id}
               onClick={() => setCurrentView(item.id)}
-              className={`flex flex-col items-center justify-center w-full gap-1.5 py-3 px-1 rounded-xl transition-all ${
+              className={`flex flex-col items-center justify-center w-full gap-2 py-4 px-2 rounded-xl transition-all ${
                 isActive 
                   ? 'text-purple-700 dark:text-purple-400 bg-purple-50 dark:bg-purple-900/30 font-semibold' 
-                  : 'text-gray-500 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-300 hover:bg-gray-50 dark:hover:bg-gray-800 font-medium'
+                  : 'text-gray-500 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-300 hover:bg-gray-50 dark:hover:bg-zinc-800 font-medium'
               }`}
             >
-              <item.icon size={22} strokeWidth={isActive ? 2.5 : 2} />
-              <span className="text-[10px] text-center leading-tight">{item.label}</span>
+              <item.icon size={24} strokeWidth={isActive ? 2.5 : 2} />
+              <span className="text-[11px] text-center leading-tight">{item.label}</span>
             </button>
           );
         })}
@@ -412,8 +426,11 @@ const TopNavbar = ({ isDarkMode, toggleDarkMode, onLogout, onNavigate, onNavigat
               <path d="M8 4 L 16 12 L 8 20" stroke="#A3C613" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
             <div className="h-6 w-px bg-gray-300 dark:bg-zinc-700"></div>
-            <div className="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-xl shadow-sm">
-              U
+            <div className="text-purple-600 dark:text-purple-500">
+              <svg width="28" height="28" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M35 45 V 70 C 35 85 45 95 60 95 C 75 95 85 85 85 70 V 45" stroke="currentColor" strokeWidth="16" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M45 30 L 60 40 L 75 30" stroke="currentColor" strokeWidth="12" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
             </div>
           </button>
 
@@ -483,12 +500,16 @@ const TopNavbar = ({ isDarkMode, toggleDarkMode, onLogout, onNavigate, onNavigat
                 <p className="text-sm font-semibold text-gray-900 dark:text-white leading-tight">Jefherson</p>
                 <p className="text-[11px] text-gray-500 dark:text-gray-400 font-medium">ADS • 3º Semestre</p>
               </div>
-              <img
-                src={profileImage}
-                alt="Perfil"
-                className="w-9 h-9 rounded-full object-cover ring-2 ring-purple-100 dark:ring-purple-900/50"
-                referrerPolicy="no-referrer"
-              />
+              {profileImage ? (
+                <img
+                  src={profileImage}
+                  alt="Perfil"
+                  className="w-9 h-9 rounded-full object-cover ring-2 ring-purple-100 dark:ring-purple-900/50"
+                  referrerPolicy="no-referrer"
+                />
+              ) : (
+                <UserCircle className="w-9 h-9 text-zinc-400" />
+              )}
             </button>
 
             {isProfileOpen && (
@@ -693,7 +714,7 @@ const SubjectsGrid = () => {
       code: 'ADS1AN-PBB1-68615550',
       type: 'Prática (Presencial)',
       progress: 16,
-      imageSeed: 'uxdesign',
+      gradient: 'from-purple-600 to-purple-800',
       color: 'purple'
     },
     {
@@ -701,16 +722,8 @@ const SubjectsGrid = () => {
       code: 'ADS1AN-PBB-68612179',
       type: 'Teórica (Presencial)',
       progress: 1,
-      imageSeed: 'math',
-      color: 'blue'
-    },
-    {
-      name: 'Programação de Soluções Computacionais',
-      code: 'ADS1AN-PBB1-68606221',
-      type: 'UA Imersiva',
-      progress: 45,
-      imageSeed: 'coding',
-      color: 'emerald'
+      gradient: 'from-fuchsia-600 to-purple-700',
+      color: 'fuchsia'
     }
   ];
 
@@ -724,14 +737,8 @@ const SubjectsGrid = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 sm:gap-6">
         {subjects.map((subject, idx) => (
           <div key={idx} className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden flex flex-col hover:shadow-md hover:border-purple-100 dark:hover:border-purple-900/50 transition-all group">
-            <div className="h-28 relative bg-gray-100 dark:bg-gray-900 overflow-hidden">
-              <img 
-                src={`https://picsum.photos/seed/${subject.imageSeed}/400/200?blur=2`} 
-                alt={subject.name}
-                className="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-500"
-                referrerPolicy="no-referrer"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-gray-900/20 to-transparent"></div>
+            <div className={`h-28 relative bg-gradient-to-br ${subject.gradient} overflow-hidden`}>
+              <div className="absolute inset-0 bg-black/10"></div>
               <div className="absolute bottom-3 left-4 right-4 flex justify-between items-end">
                 <span className="bg-white/20 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-md uppercase tracking-wider border border-white/10 shadow-sm">
                   {subject.type}
@@ -970,6 +977,7 @@ const MeusDadosScreen = ({ profileImage, setProfileImage }: { profileImage: stri
   const handleSavePhoto = () => {
     if (selectedImage && termsAccepted) {
       setProfileImage(selectedImage);
+      localStorage.setItem('ulife_profile_image', selectedImage);
       setIsPhotoModalOpen(false);
       setSelectedImage(null);
       setTermsAccepted(false);
@@ -1003,12 +1011,16 @@ const MeusDadosScreen = ({ profileImage, setProfileImage }: { profileImage: stri
             className="shrink-0 relative group cursor-pointer"
             onClick={() => setIsPhotoModalOpen(true)}
           >
-            <img
-              src={profileImage}
-              alt="Perfil"
-              className="w-32 h-32 rounded-full object-cover ring-4 ring-purple-50 dark:ring-purple-900/20 group-hover:brightness-75 transition-all"
-              referrerPolicy="no-referrer"
-            />
+            {profileImage ? (
+              <img
+                src={profileImage}
+                alt="Perfil"
+                className="w-32 h-32 rounded-full object-cover ring-4 ring-purple-50 dark:ring-purple-900/20 group-hover:brightness-75 transition-all"
+                referrerPolicy="no-referrer"
+              />
+            ) : (
+              <UserCircle className="w-32 h-32 text-zinc-400 bg-zinc-100 dark:bg-zinc-800 rounded-full ring-4 ring-purple-50 dark:ring-purple-900/20 group-hover:brightness-75 transition-all" />
+            )}
             <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
               <div className="bg-black/50 p-2 rounded-full text-white">
                 <Pencil size={20} />
@@ -1058,12 +1070,16 @@ const MeusDadosScreen = ({ profileImage, setProfileImage }: { profileImage: stri
             <div className="p-6 flex flex-col sm:flex-row gap-8">
               <div className="flex flex-col items-center gap-2">
                 <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Imagem atual</span>
-                <img
-                  src={selectedImage || profileImage}
-                  alt="Pré-visualização"
-                  className="w-32 h-32 rounded-lg object-cover border border-gray-200 dark:border-zinc-700"
-                  referrerPolicy="no-referrer"
-                />
+                {selectedImage || profileImage ? (
+                  <img
+                    src={selectedImage || profileImage}
+                    alt="Pré-visualização"
+                    className="w-32 h-32 rounded-lg object-cover border border-gray-200 dark:border-zinc-700"
+                    referrerPolicy="no-referrer"
+                  />
+                ) : (
+                  <UserCircle className="w-32 h-32 text-zinc-400 bg-zinc-100 dark:bg-zinc-800 rounded-lg border border-gray-200 dark:border-zinc-700" />
+                )}
               </div>
               
               <div className="flex-1 space-y-6">
@@ -1151,7 +1167,7 @@ const DashboardScreen = ({ onLogout, onNavigateHome, profileImage, setProfileIma
       <Sidebar currentView={currentView} setCurrentView={setCurrentView} />
       
       <div className="flex-1 flex flex-col h-full overflow-hidden relative">
-        <TopNavbar isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} onLogout={onLogout} onNavigate={setCurrentView} onNavigateHome={onNavigateHome} profileImage={profileImage} />
+        <TopNavbar isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} onLogout={onLogout} onNavigate={setCurrentView} onNavigateHome={() => { setCurrentView('home'); onNavigateHome(); }} profileImage={profileImage} />
         
         <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 pb-20">
           {renderView()}
@@ -1164,7 +1180,9 @@ const DashboardScreen = ({ onLogout, onNavigateHome, profileImage, setProfileIma
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<'login' | 'microsoft-selection' | 'dashboard' | 'recuperar-senha'>('login');
   const [username, setUsername] = useState('');
-  const [profileImage, setProfileImage] = useState('https://picsum.photos/seed/jefherson/200/200');
+  const [profileImage, setProfileImage] = useState(() => {
+    return localStorage.getItem('ulife_profile_image') || '';
+  });
 
   const handleLogin = (user: string) => {
     setUsername(user);
