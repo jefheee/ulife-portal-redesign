@@ -434,6 +434,18 @@ const TopNavbar = ({ isDarkMode, toggleDarkMode, onLogout, onNavigate, onNavigat
             </div>
           </button>
 
+          <button 
+            onClick={onNavigateHome}
+            className="md:hidden flex items-center gap-2 hover:opacity-80 transition-opacity"
+          >
+            <div className="text-purple-600 dark:text-purple-500">
+              <svg width="28" height="28" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M35 45 V 70 C 35 85 45 95 60 95 C 75 95 85 85 85 70 V 45" stroke="currentColor" strokeWidth="16" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M45 30 L 60 40 L 75 30" stroke="currentColor" strokeWidth="12" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+          </button>
+
           <div className="flex-1 max-w-2xl hidden sm:block relative mx-auto">
             <div className="relative group">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-purple-500 transition-colors" size={18} />
