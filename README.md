@@ -12,7 +12,15 @@ Um protótipo funcional e moderno focado em resolver problemas reais de UX/UI de
 
 ## 📸 Preview do Projeto
 
-> **Nota do Desenvolvedor:** *[Arraste e solte suas prints (Modo Claro e Modo Escuro, Tela de Login e Dashboard) aqui no GitHub para gerar os links automaticamente]*
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/78539a92-fe68-4841-b97e-f7f90f40cd59" />
+
+---
+
+---
+
+---
+
+---
 
 ---
 
