@@ -120,13 +120,13 @@ const MeusDadosScreen: React.FC<MeusDadosScreenProps> = ({
                   Nome Completo
                 </dt>
                 <dd className="mt-1 text-sm font-semibold text-gray-900 dark:text-white">
-                  Jefherson Luiz da Silva
+                  João da Silva
                 </dd>
               </div>
               <div>
                 <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">E-mail</dt>
                 <dd className="mt-1 text-sm font-semibold text-gray-900 dark:text-white">
-                  jefhersonluiz08@gmail.com
+                  joao.silva@gmail.com
                 </dd>
               </div>
               <div>
@@ -134,7 +134,7 @@ const MeusDadosScreen: React.FC<MeusDadosScreenProps> = ({
                   Login (RA/CPF)
                 </dt>
                 <dd className="mt-1 text-sm font-semibold text-gray-900 dark:text-white">
-                  10551233931
+                  123456789
                 </dd>
               </div>
               <div>
@@ -142,13 +142,13 @@ const MeusDadosScreen: React.FC<MeusDadosScreenProps> = ({
                   Data de Nascimento
                 </dt>
                 <dd className="mt-1 text-sm font-semibold text-gray-900 dark:text-white">
-                  15 / 08 / 2006
+                  01 / 01 / 2000
                 </dd>
               </div>
               <div>
                 <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Telefone</dt>
                 <dd className="mt-1 text-sm font-semibold text-gray-900 dark:text-white">
-                  (48) 98808-5805
+                  (11) 91234-5678
                 </dd>
               </div>
             </dl>

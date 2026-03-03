@@ -119,7 +119,7 @@ const NotificacoesScreen: React.FC<NotificacoesScreenProps> = ({ onNavigate }) =
       <button
         type="button"
         onClick={() => toggleCanal(id, canal)}
-        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+        className={`relative inline-flex h-6 w-10 items-center rounded-full transition-colors ${
           ativo ? 'bg-purple-600' : 'bg-gray-300 dark:bg-zinc-700'
         }`}
       >
@@ -204,16 +204,20 @@ const NotificacoesScreen: React.FC<NotificacoesScreenProps> = ({ onNavigate }) =
                 {categoria.itens.map((item) => (
                   <div
                     key={item.id}
-                    className="px-4 sm:px-6 py-3 flex items-center gap-3"
+                    className="px-4 sm:px-6 py-3 grid grid-cols-4 sm:grid-cols-5 gap-2 items-center"
                   >
-                    <div className="flex-1">
+                    <div className="col-span-2 sm:col-span-2">
                       <p className="text-sm text-gray-800 dark:text-gray-100">
                         {item.label}
                       </p>
                     </div>
-                    <div className="flex items-center gap-4">
+                    <div className="flex justify-center">
                       <div className="hidden sm:block">{renderToggle(item.id, 'email')}</div>
+                    </div>
+                    <div className="flex justify-center">
                       <div className="hidden sm:block">{renderToggle(item.id, 'site')}</div>
+                    </div>
+                    <div className="flex justify-center">
                       <div className="block">{renderToggle(item.id, 'app')}</div>
                     </div>
                   </div>
