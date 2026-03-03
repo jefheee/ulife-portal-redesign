@@ -25,11 +25,13 @@ Um protótipo funcional e moderno focado em resolver problemas reais de UX/UI de
 
 ---
 
-## 🎯 O Projeto
+## 🎯 A História do Projeto
 
-O objetivo deste projeto foi recriar a interface do portal Ulife, utilizado por instituições do Ecossistema Ânima (como a Unisul), aplicando conceitos sólidos de **Experiência do Usuário (UX)**, **Design de Interface (UI)** e arquitetura de software modular.
+Este projeto nasceu de uma dor real. Como aluno de Análise e Desenvolvimento de Sistemas, eu sempre ouvia reclamações (minhas, de colegas e de professores) sobre o sistema acadêmico que utilizamos. As dificuldades iam desde não conseguir encontrar funcionalidades básicas até lidar com um design ultrapassado e uma UX confusa, com menus em "sanfona" excessivamente longos.
 
-O foco principal foi reduzir a sobrecarga cognitiva do aluno, eliminando menus redundantes e trazendo as informações mais críticas (como aulas do dia, prazos de trabalhos e status de documentos) para o primeiro plano.
+Decidi transformar essa frustração em uma oportunidade de aprendizado. Iniciei este projeto utilizando o **Google AI Studio** para idealizar como seria um dashboard moderno e com tema escuro. Minha intenção inicial não era construir um sistema completo, mas sim testar minhas ideias de UX. No entanto, o projeto escalou. 
+
+Com a ajuda de IA, migrei o projeto para o **Cursor IDE**, o que me forçou a aprender a estruturar aplicações reais. Foi através deste projeto que tive meu primeiro contato profundo com **React**, **TypeScript** (antes só havia programado um pouco em Java no NetBeans para a faculdade) e **Tailwind CSS**. Também me permitiu descobrir e planejar a futura integração de ferramentas profissionais como Docker, APIs e Postman.
 
 ### 🛑 O Problema (Design Original)
 * Navegação baseada em menus expansíveis excessivamente longos e escondidos.
@@ -57,22 +59,43 @@ O foco principal foi reduzir a sobrecarga cognitiva do aluno, eliminando menus r
 
 ## 📁 Arquitetura e Organização (Modularização)
 
-O projeto foi refatorado para seguir as melhores práticas de Clean Code no React:
+O projeto foi refatorado para seguir as melhores práticas de Clean Code no React, abandonando o arquivo único inicial para uma estrutura modular:
 
 ```text
-📦 src
- ┣ 📂 components      # Componentes visuais isolados e reutilizáveis
- ┃ ┣ 📜 Sidebar.tsx   # Barra de navegação lateral (responsiva)
- ┃ ┣ 📜 TopNavbar.tsx # Barra superior com dropdowns e alertas
- ┃ ┣ 📜 HeroCard.tsx  # Lógica de calendário do dia atual
- ┃ ┗ 📜 Footer.tsx    # Rodapé global de versão e links
- ┣ 📂 screens         # Telas completas que agrupam componentes
- ┃ ┣ 📜 LoginScreen.tsx
- ┃ ┣ 📜 DashboardScreen.tsx
- ┃ ┣ 📜 MeusDocumentosScreen.tsx
- ┃ ┗ 📜 NotificacoesScreen.tsx
- ┣ 📜 App.tsx         # Orquestrador principal de rotas e Dark Mode
- ┗ 📜 main.tsx        # Ponto de entrada do React
+📦 ulife-portal-redesign
+ ┣ 📂 public          # Ativos estáticos
+ ┣ 📂 src
+ ┃ ┣ 📂 components    # Componentes visuais isolados e reutilizáveis
+ ┃ ┃ ┣ 📜 DashboardHome.tsx
+ ┃ ┃ ┣ 📜 Footer.tsx
+ ┃ ┃ ┣ 📜 HeroCard.tsx
+ ┃ ┃ ┣ 📜 QuickShortcuts.tsx
+ ┃ ┃ ┣ 📜 RecordedClassesView.tsx
+ ┃ ┃ ┣ 📜 ScheduleView.tsx
+ ┃ ┃ ┣ 📜 Sidebar.tsx
+ ┃ ┃ ┣ 📜 SubjectsGrid.tsx
+ ┃ ┃ ┣ 📜 TopNavbar.tsx
+ ┃ ┃ ┗ 📜 UrgentTasks.tsx
+ ┃ ┣ 📂 screens       # Telas completas que agrupam componentes e gerenciam estados complexos
+ ┃ ┃ ┣ 📜 DashboardScreen.tsx
+ ┃ ┃ ┣ 📜 LoginScreen.tsx
+ ┃ ┃ ┣ 📜 MeusDadosScreen.tsx
+ ┃ ┃ ┣ 📜 MeusDocumentosScreen.tsx
+ ┃ ┃ ┣ 📜 MicrosoftSelectionScreen.tsx
+ ┃ ┃ ┣ 📜 NotificacoesScreen.tsx
+ ┃ ┃ ┗ 📜 RecuperarSenhaScreen.tsx
+ ┃ ┣ 📜 App.tsx       # Orquestrador principal de rotas globais e Dark Mode
+ ┃ ┣ 📜 index.css     # Diretivas base do Tailwind CSS
+ ┃ ┗ 📜 main.tsx      # Ponto de entrada (Entry point) da aplicação React
+ ┣ 📜 .env.example
+ ┣ 📜 .gitignore
+ ┣ 📜 index.html
+ ┣ 📜 metadata.json
+ ┣ 📜 package-lock.json
+ ┣ 📜 package.json    # Dependências do projeto (React, Tailwind, Lucide, Vite)
+ ┣ 📜 README.md       # Esta documentação
+ ┣ 📜 tsconfig.json   # Configurações do compilador TypeScript
+ ┗ 📜 vite.config.ts  # Configurações do bundler Vite
 ```
 
 ---
@@ -107,19 +130,27 @@ O projeto foi refatorado para seguir as melhores práticas de Clean Code no Reac
 
 ## 💻 Como rodar localmente
 
-1. Clone este repositório:
+Para executar este projeto em sua máquina, você precisará do **Node.js** (Ambiente de execução JavaScript) instalado. Recomenda-se a versão LTS (Long Term Support).
+
+1. **Clone este repositório:**
+   Abra o seu terminal (Prompt de Comando, PowerShell ou Terminal do Linux/Mac) e digite:
    ```bash
    git clone [https://github.com/jefheee/ulife-portal-redesign.git](https://github.com/jefheee/ulife-portal-redesign.git)
    ```
-2. Acesse a pasta do projeto:
+
+2. **Acesse a pasta do projeto:**
    ```bash
    cd ulife-portal-redesign
    ```
-3. Instale as dependências:
+
+3. **Instale as dependências:**
+   Este comando lerá o arquivo `package.json` e fará o download de todas as bibliotecas necessárias (React, Tailwind, etc.) para a pasta `node_modules`. Se você estiver no Windows e receber um erro de permissão, pode ser necessário rodar `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser` no PowerShell como Administrador antes de instalar.
    ```bash
    npm install
    ```
-4. Inicie o servidor de desenvolvimento:
+
+4. **Inicie o servidor de desenvolvimento:**
+   O Vite irá compilar o projeto e iniciar um servidor local (geralmente em `http://localhost:5173`).
    ```bash
    npm run dev
    ```
@@ -128,10 +159,11 @@ O projeto foi refatorado para seguir as melhores práticas de Clean Code no Reac
 
 ## 🤝 Padrões da Comunidade (Community Standards)
 
-Este projeto adota métricas para garantir um ambiente colaborativo saudável:
-* **Code of Conduct:** Em breve.
-* **Contributing:** Feedbacks e Pull Requests focados em melhoria de UI/UX são bem-vindos.
-* **License:** Distribuído sob a licença MIT.
+Este projeto adota métricas para garantir um ambiente colaborativo saudável, em conformidade com as recomendações do GitHub:
+* **Code of Conduct:** Estabelecido para garantir um ambiente acolhedor.
+* **Contributing:** Diretrizes de contribuição estão ativas. Feedbacks e Pull Requests focados em melhoria de UI/UX são sempre bem-vindos.
+* **License:** O projeto é distribuído sob a licença MIT, permitindo uso livre e modificações.
+* **Security Policy & Issue Templates:** Configurados para facilitar o reporte de bugs e vulnerabilidades.
 
 ---
 *Desenvolvido com dedicação por [Jefherson Luiz](https://github.com/jefheee).*
