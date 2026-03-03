@@ -15,12 +15,10 @@ Um protótipo funcional e moderno focado em resolver problemas reais de UX/UI de
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/78539a92-fe68-4841-b97e-f7f90f40cd59" />
 
 ---
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/edddc479-f88c-4672-87cf-e1ac825d3703" />
 
 ---
-
----
-
----
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/78cb2db1-b0dd-420d-81f9-e0311240a23e" />
 
 ---
 
