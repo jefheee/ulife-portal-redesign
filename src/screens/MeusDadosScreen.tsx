@@ -4,11 +4,13 @@ import { Pencil, UserCircle, X } from 'lucide-react';
 interface MeusDadosScreenProps {
   profileImage: string;
   setProfileImage: (img: string) => void;
+  onNavigate: (view: string) => void;
 }
 
 const MeusDadosScreen: React.FC<MeusDadosScreenProps> = ({
   profileImage,
   setProfileImage,
+  onNavigate,
 }) => {
   const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -63,13 +65,22 @@ const MeusDadosScreen: React.FC<MeusDadosScreenProps> = ({
 
       <div className="border-b border-gray-200 dark:border-zinc-700">
         <nav className="-mb-px flex gap-6" aria-label="Tabs">
-          <button className="border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors">
+          <button
+            onClick={() => onNavigate('notificacoes')}
+            className="border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors"
+          >
             Notificações
           </button>
-          <button className="border-purple-500 text-purple-600 dark:text-purple-400 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors">
+          <button
+            onClick={() => onNavigate('meus-dados')}
+            className="border-purple-500 text-purple-600 dark:text-purple-400 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors"
+          >
             Meus Dados
           </button>
-          <button className="border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors">
+          <button
+            onClick={() => onNavigate('meus-documentos')}
+            className="border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors"
+          >
             Documentos de Matrícula
           </button>
         </nav>

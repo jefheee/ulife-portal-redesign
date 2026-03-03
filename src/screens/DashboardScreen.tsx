@@ -6,6 +6,8 @@ import DashboardHome from '../components/DashboardHome';
 import ScheduleView from '../components/ScheduleView';
 import RecordedClassesView from '../components/RecordedClassesView';
 import MeusDadosScreen from './MeusDadosScreen';
+import MeusDocumentosScreen from './MeusDocumentosScreen';
+import NotificacoesScreen from './NotificacoesScreen';
 
 interface DashboardScreenProps {
   onLogout: () => void;
@@ -35,8 +37,18 @@ const DashboardScreen: React.FC<DashboardScreenProps> = ({
         return <ScheduleView />;
       case 'recorded':
         return <RecordedClassesView />;
+      case 'notificacoes':
+        return <NotificacoesScreen onNavigate={setCurrentView} />;
       case 'meus-dados':
-        return <MeusDadosScreen profileImage={profileImage} setProfileImage={setProfileImage} />;
+        return (
+          <MeusDadosScreen
+            profileImage={profileImage}
+            setProfileImage={setProfileImage}
+            onNavigate={setCurrentView}
+          />
+        );
+      case 'meus-documentos':
+        return <MeusDocumentosScreen onNavigate={setCurrentView} />;
       default:
         return (
           <div className="flex flex-col items-center justify-center h-64 text-gray-500 dark:text-gray-400">

@@ -235,7 +235,10 @@ const TopNavbar: React.FC<TopNavbarProps> = ({
                     </button>
                   </li>
                   <li>
-                    <button className="w-full px-4 py-2 text-sm text-left text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-zinc-700 transition-colors">
+                    <button
+                      onClick={() => onNavigate('meus-documentos')}
+                      className="w-full px-4 py-2 text-sm text-left text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-zinc-700 transition-colors"
+                    >
                       Meus Documentos
                     </button>
                   </li>
@@ -245,7 +248,10 @@ const TopNavbar: React.FC<TopNavbarProps> = ({
                     </button>
                   </li>
                   <li>
-                    <button className="w-full px-4 py-2 text-sm text-left text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-zinc-700 transition-colors">
+                    <button
+                      onClick={() => onNavigate('notificacoes')}
+                      className="w-full px-4 py-2 text-sm text-left text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-zinc-700 transition-colors"
+                    >
                       Configurar Notificações
                     </button>
                   </li>
