@@ -201,10 +201,10 @@ const TopNavbar: React.FC<TopNavbarProps> = ({
             >
               <div className="text-right hidden sm:block">
                 <p className="text-sm font-semibold text-gray-900 dark:text-white leading-tight">
-                  Jefherson
+                  João
                 </p>
                 <p className="text-[11px] text-gray-500 dark:text-gray-400 font-medium">
-                  ADS • 3º Semestre
+                  Ciência da Computação • 5º Semestre
                 </p>
               </div>
               {profileImage ? (
@@ -222,8 +222,10 @@ const TopNavbar: React.FC<TopNavbarProps> = ({
             {isProfileOpen && (
               <div className="absolute top-full right-0 mt-2 w-56 bg-white dark:bg-zinc-800 rounded-xl shadow-lg border border-gray-100 dark:border-zinc-700 overflow-hidden z-50">
                 <div className="p-4 border-b border-gray-100 dark:border-zinc-700 sm:hidden">
-                  <p className="text-sm font-bold text-gray-900 dark:text-white">Jefherson Luiz</p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">ADS • 3º Semestre</p>
+                  <p className="text-sm font-bold text-gray-900 dark:text-white">João da Silva</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    Ciência da Computação • 5º Semestre
+                  </p>
                 </div>
                 <ul className="py-2">
                   <li>
@@ -235,7 +237,10 @@ const TopNavbar: React.FC<TopNavbarProps> = ({
                     </button>
                   </li>
                   <li>
-                    <button className="w-full px-4 py-2 text-sm text-left text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-zinc-700 transition-colors">
+                    <button
+                      onClick={() => onNavigate('meus-documentos')}
+                      className="w-full px-4 py-2 text-sm text-left text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-zinc-700 transition-colors"
+                    >
                       Meus Documentos
                     </button>
                   </li>
@@ -245,7 +250,10 @@ const TopNavbar: React.FC<TopNavbarProps> = ({
                     </button>
                   </li>
                   <li>
-                    <button className="w-full px-4 py-2 text-sm text-left text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-zinc-700 transition-colors">
+                    <button
+                      onClick={() => onNavigate('notificacoes')}
+                      className="w-full px-4 py-2 text-sm text-left text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-zinc-700 transition-colors"
+                    >
                       Configurar Notificações
                     </button>
                   </li>

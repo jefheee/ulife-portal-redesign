@@ -6,6 +6,9 @@ import DashboardHome from '../components/DashboardHome';
 import ScheduleView from '../components/ScheduleView';
 import RecordedClassesView from '../components/RecordedClassesView';
 import MeusDadosScreen from './MeusDadosScreen';
+import MeusDocumentosScreen from './MeusDocumentosScreen';
+import NotificacoesScreen from './NotificacoesScreen';
+import Footer from '../components/Footer';
 
 interface DashboardScreenProps {
   onLogout: () => void;
@@ -35,8 +38,18 @@ const DashboardScreen: React.FC<DashboardScreenProps> = ({
         return <ScheduleView />;
       case 'recorded':
         return <RecordedClassesView />;
+      case 'notificacoes':
+        return <NotificacoesScreen onNavigate={setCurrentView} />;
       case 'meus-dados':
-        return <MeusDadosScreen profileImage={profileImage} setProfileImage={setProfileImage} />;
+        return (
+          <MeusDadosScreen
+            profileImage={profileImage}
+            setProfileImage={setProfileImage}
+            onNavigate={setCurrentView}
+          />
+        );
+      case 'meus-documentos':
+        return <MeusDocumentosScreen onNavigate={setCurrentView} />;
       default:
         return (
           <div className="flex flex-col items-center justify-center h-64 text-gray-500 dark:text-gray-400">
@@ -71,7 +84,12 @@ const DashboardScreen: React.FC<DashboardScreenProps> = ({
           onToggleSidebar={() => setIsSidebarOpen((prev) => !prev)}
         />
 
-        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 pb-20">{renderView()}</main>
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 pb-20">
+          <div className="max-w-6xl mx-auto flex flex-col min-h-full">
+            <div className="flex-1">{renderView()}</div>
+            <Footer />
+          </div>
+        </main>
       </div>
     </div>
   );

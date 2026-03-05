@@ -10,7 +10,7 @@ const DashboardHome: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-1 tracking-tight">
-            Olá, Jefherson! 👋
+            Olá, João! 👋
           </h1>
           <p className="text-gray-500 dark:text-gray-400 font-medium">
             Aqui está o resumo do seu semestre.

@@ -58,10 +58,8 @@ const MicrosoftSelectionScreen: React.FC<MicrosoftSelectionScreenProps> = ({
                 )}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-base font-bold text-gray-900 truncate">
-                  Jefherson Luiz da Silva
-                </p>
-                <p className="text-sm text-gray-500 truncate">{username}@ulife.com.br</p>
+                <p className="text-base font-bold text-gray-900 truncate">João da Silva</p>
+                <p className="text-sm text-gray-500 truncate">{username || 'joao.silva'}@ulife.com.br</p>
                 <p className="text-xs text-gray-400 mt-0.5">Entrou</p>
               </div>
             </button>
