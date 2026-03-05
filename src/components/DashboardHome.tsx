@@ -13,7 +13,7 @@ const DashboardHome: React.FC = () => {
             Olá, Jefherson! 👋
           </h1>
           <p className="text-gray-500 dark:text-gray-400 font-medium">
-            Aqui está o resumo do seu semestre. Você tem uma aula em breve.
+            Aqui está o resumo do seu semestre.
           </p>
         </div>
         <p className="text-sm font-semibold text-gray-400 dark:text-gray-500 hidden sm:block">
