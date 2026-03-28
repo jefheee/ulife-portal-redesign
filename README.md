@@ -120,7 +120,7 @@ O projeto foi refatorado para seguir as melhores práticas de Clean Code no Reac
 
 ## 🔄 Changelog
 
-* **v1.4.0** - Anonimização de dados para privacidade, refatoração de CSS Grid nos Toggles de notificação, adição do Footer Global.
+* **v1.4.0** - Refatoração de CSS Grid nos Toggles de notificação, adição do Footer Global.
 * **v1.3.0** - Criação da Tela de Notificações, blindagem do input de arquivos (apenas doc/img) e correção de links de privacidade.
 * **v1.2.0** - Criação da Tela de Documentos de Matrícula com modal interativo de envio, badges reativos de status e roteamento de abas.
 * **v1.1.0** - Modularização da arquitetura (`components/` e `screens/`), persistência real da foto de perfil (Base64) e correção do menu Mobile.
